@@ -1,14 +1,45 @@
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import heroBg from "@/assets/hero-bg.png";
 
+const phrases = ["Tu visión", "Tu marca", "Tu historia"];
+
 const HeroSection = () => {
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const current = phrases[phraseIndex];
+    const speed = isDeleting ? 60 : 100;
+
+    if (!isDeleting && displayed === current) {
+      const timeout = setTimeout(() => setIsDeleting(true), 1800);
+      return () => clearTimeout(timeout);
+    }
+
+    if (isDeleting && displayed === "") {
+      setIsDeleting(false);
+      setPhraseIndex((prev) => (prev + 1) % phrases.length);
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      setDisplayed(
+        isDeleting ? current.slice(0, displayed.length - 1) : current.slice(0, displayed.length + 1)
+      );
+    }, speed);
+
+    return () => clearTimeout(timeout);
+  }, [displayed, isDeleting, phraseIndex]);
+
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <img src={heroBg} alt="" className="w-full h-full object-cover opacity-40" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
-        <div className="absolute inset-0 bg-grid opacity-20 text-violet-500" />
+        <div className="absolute inset-0 bg-grid opacity-20 text-primary" />
       </div>
 
       {/* Floating orbs */}
@@ -20,20 +51,20 @@ const HeroSection = () => {
           className="text-primary font-display text-sm md:text-base tracking-[0.3em] uppercase mb-6"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}>CREADORA DE CONTENIDO
-
-
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}>
+          CREADORA DE CONTENIDO
         </motion.p>
 
         <motion.h1
-          className="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-bold leading-[0.95] tracking-tight mb-8 text-violet-300"
+          className="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-bold leading-[0.95] tracking-tight mb-8"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}>Tu visión hecha realida.
-
-
+          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}>
+          <span className="text-foreground">{displayed}</span>
+          <span className="animate-pulse text-foreground">|</span>
           <br />
-          into <span className="text-gradient">visual art</span>
+          <span className="text-primary">hecha realidad</span>
+          <span className="text-primary text-6xl md:text-8xl lg:text-[6.5rem]">.</span>
         </motion.h1>
 
         <motion.p
@@ -41,9 +72,8 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.25 }}>
-
-          Photo editing, digital art, and commercial video production — 
-          crafted with precision and artistic flair.
+          Edición de fotos, arte digital y producción de video comercial —
+          con precisión y estilo artístico.
         </motion.p>
 
         <motion.div
@@ -51,18 +81,15 @@ const HeroSection = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.45 }}>
-
           <a
             href="#work"
             className="bg-primary text-primary-foreground px-8 py-3.5 font-display text-sm tracking-wide rounded-md transition-all duration-300 hover:shadow-[0_0_25px_hsl(263_70%_58%_/_0.5)]">
-
-            Explore My Work
+            Explorar Mi Trabajo
           </a>
           <a
             href="#contact"
             className="border border-primary/30 text-foreground px-8 py-3.5 font-display text-sm tracking-wide rounded-md transition-all duration-300 hover:border-primary hover:text-primary hover:shadow-[0_0_15px_hsl(263_70%_58%_/_0.2)]">
-
-            Get in Touch
+            Contáctame
           </a>
         </motion.div>
       </div>
@@ -72,13 +99,12 @@ const HeroSection = () => {
         className="absolute bottom-10 left-1/2 -translate-x-1/2"
         animate={{ y: [0, 8, 0] }}
         transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}>
-
         <div className="w-5 h-9 border border-primary/30 rounded-full flex items-start justify-center p-1.5">
           <div className="w-1 h-2.5 bg-primary rounded-full" />
         </div>
       </motion.div>
-    </section>);
-
+    </section>
+  );
 };
 
 export default HeroSection;
