@@ -11,11 +11,12 @@ const ContactSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto"
-        >
-          <p className="text-primary font-display text-sm tracking-[0.3em] uppercase mb-4">Contact</p>
-          <h2 className="font-display text-4xl md:text-6xl font-bold mb-6">
-            Let's create<br />
+          className="text-center max-w-2xl mx-auto">
+
+          <p className="text-primary font-display text-sm tracking-[0.3em] uppercase mb-4">CONTACTO</p>
+          <h2 className="font-display text-4xl md:text-6xl font-bold mb-6">Llevemos tu marca
+a las redes sociales.
+            <br />
             <span className="text-gradient">something amazing</span>
           </h2>
           <p className="text-muted-foreground text-lg mb-4 font-body">
@@ -25,11 +26,10 @@ const ContactSection = () => {
             Currently accepting new projects — reach out and let's discuss your ideas.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="mailto:hello@example.com"
-              className="bg-primary text-primary-foreground px-10 py-4 font-display text-sm tracking-wide rounded-md transition-all duration-300 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.5)] animate-pulse-glow"
-            >
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">Verificar disponibilidad
+            <a href="mailto:hello@example.com"
+            className="bg-primary text-primary-foreground px-10 py-4 font-display text-sm tracking-wide rounded-md transition-all duration-300 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.5)] animate-pulse-glow">
+
               hello@example.com
             </a>
           </div>
@@ -46,20 +46,20 @@ const ContactSection = () => {
             © 2025 Studio. All rights reserved.
           </p>
           <div className="flex gap-8">
-            {["Instagram", "Behance", "Twitter", "LinkedIn"].map((link) => (
-              <a
-                key={link}
-                href="#"
-                className="text-muted-foreground text-sm hover:text-primary transition-colors duration-300 font-body"
-              >
+            {["Instagram", "Behance", "Twitter", "LinkedIn"].map((link) =>
+            <a
+              key={link}
+              href="#"
+              className="text-muted-foreground text-sm hover:text-primary transition-colors duration-300 font-body">
+
                 {link}
               </a>
-            ))}
+            )}
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 };
 
 export default ContactSection;
