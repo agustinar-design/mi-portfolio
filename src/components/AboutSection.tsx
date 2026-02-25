@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-const skills = ["Photo Editing", "Color Grading", "Compositing", "Video Production", "Motion Graphics", "Retouching"];
+const skills = ["Edición de Video", "Paleta de Colores", "Composición Visual", "Ritmo Audiovisual", "Análisis de Métricas", "Producción en Canva"];
 
 const AboutSection = () => {
   return (
@@ -15,23 +15,27 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-primary font-display text-sm tracking-[0.3em] uppercase mb-4">About Me</p>
+            <p className="text-primary font-display text-sm tracking-[0.3em] uppercase mb-4">Sobre Mí</p>
             <h2 className="font-display text-4xl md:text-5xl font-bold mb-8">
-              My Style &<br /><span className="text-gradient">Creative Process</span>
+              Lo que me<br /><span className="text-gradient">destaca</span>
             </h2>
             <div className="space-y-5 text-muted-foreground leading-relaxed font-body">
               <p>
-                I'm a visual artist and creative editor specializing in transforming raw imagery 
-                into compelling visual stories. My work spans from subtle photo enhancements 
-                to full-scale digital compositions and commercial video production.
+                Me especializo en la creación de contenido visual con identidad clara y coherente.
               </p>
               <p>
-                Every project starts with understanding the vision — then I bring it to life 
-                through meticulous attention to detail, bold color choices, and a deep 
-                understanding of visual storytelling.
+                Trabajo especialmente la paleta de colores, la composición y el ritmo audiovisual
+                para que cada pieza mantenga continuidad con lo que la marca busca comunicar.
               </p>
               <p>
-                Currently available for freelance projects, collaborations, and commercial work.
+                Combino el enfoque creativo con análisis de rendimiento: evalúo métricas, comparo resultados
+                entre publicaciones y ajusto decisiones en función del comportamiento real de la audiencia.
+              </p>
+              <p>
+                Para ello utilizo las mismas estadísticas de las redes sociales (TikTok, META), Metricool, LookerStudio y Google Sheets.
+              </p>
+              <p>
+                Todo el contenido es producido y organizado en Canva para mantener consistencia visual y eficiencia de trabajo.
               </p>
             </div>
           </motion.div>
@@ -42,7 +46,7 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.15 }}
           >
-            <p className="text-primary font-display text-sm tracking-[0.3em] uppercase mb-4">Expertise</p>
+            <p className="text-primary font-display text-sm tracking-[0.3em] uppercase mb-4">Habilidades</p>
             <div className="flex flex-wrap gap-3 mt-8">
               {skills.map((skill, i) => (
                 <motion.span
@@ -60,10 +64,10 @@ const AboutSection = () => {
 
             <div className="mt-12 grid grid-cols-2 gap-6">
               {[
-                { number: "5+", label: "Years Experience" },
-                { number: "200+", label: "Projects Completed" },
-                { number: "50+", label: "Happy Clients" },
-                { number: "∞", label: "Creative Ideas" },
+                { number: "5+", label: "Años de Experiencia" },
+                { number: "200+", label: "Proyectos Completados" },
+                { number: "50+", label: "Clientes Satisfechos" },
+                { number: "∞", label: "Ideas Creativas" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center p-4 bg-card rounded-lg border border-border/50">
                   <p className="font-display text-2xl font-bold text-primary">{stat.number}</p>
