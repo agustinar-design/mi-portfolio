@@ -2,7 +2,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const links = [
-  { label: "Work", href: "#projects" },
+  { label: "Home", href: "#home" },
+  { label: "My Work", href: "#work" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ];
@@ -11,10 +12,10 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-xl border-b border-border/50">
       <div className="container flex items-center justify-between h-16 px-6 md:px-12">
-        <a href="#" className="font-display text-lg font-bold tracking-tight text-foreground">
-          Portfolio<span className="text-primary">.</span>
+        <a href="#home" className="font-display text-lg font-bold tracking-tight text-foreground">
+          Studio<span className="text-primary">.</span>
         </a>
 
         {/* Desktop */}
@@ -23,11 +24,17 @@ const Navbar = () => {
             <a
               key={link.label}
               href={link.href}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors font-body"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors duration-300 font-body"
             >
               {link.label}
             </a>
           ))}
+          <a
+            href="#contact"
+            className="bg-primary text-primary-foreground px-5 py-2 text-sm font-display rounded-md hover:glow-violet transition-all duration-300 hover:shadow-[0_0_20px_hsl(263_70%_58%_/_0.4)]"
+          >
+            Hire Me
+          </a>
         </div>
 
         {/* Mobile toggle */}
@@ -37,14 +44,13 @@ const Navbar = () => {
           aria-label="Toggle menu"
         >
           <div className="space-y-1.5">
-            <span className={`block w-6 h-0.5 bg-foreground transition-transform ${open ? "rotate-45 translate-y-2" : ""}`} />
-            <span className={`block w-6 h-0.5 bg-foreground transition-opacity ${open ? "opacity-0" : ""}`} />
-            <span className={`block w-6 h-0.5 bg-foreground transition-transform ${open ? "-rotate-45 -translate-y-2" : ""}`} />
+            <span className={`block w-6 h-0.5 bg-foreground transition-transform duration-300 ${open ? "rotate-45 translate-y-2" : ""}`} />
+            <span className={`block w-6 h-0.5 bg-foreground transition-opacity duration-300 ${open ? "opacity-0" : ""}`} />
+            <span className={`block w-6 h-0.5 bg-foreground transition-transform duration-300 ${open ? "-rotate-45 -translate-y-2" : ""}`} />
           </div>
         </button>
       </div>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {open && (
           <motion.div
