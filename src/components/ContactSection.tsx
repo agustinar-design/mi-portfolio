@@ -15,28 +15,26 @@ const ContactSection = () => {
 
           <p className="text-primary font-display text-sm tracking-[0.3em] uppercase mb-4">CONTACTO</p>
           <h2 className="font-display text-4xl md:text-6xl font-bold mb-6">Llevemos tu marca
-a las redes sociales.
             <br />
-            <span className="text-gradient">something amazing</span>
+            <span className="text-primary/70">a las redes sociales.</span>
           </h2>
           <p className="text-muted-foreground text-lg mb-4 font-body">
-            Have a project in mind? I'd love to bring your vision to life.
+            ¿Qué visión tenés para tu empresa? Me encantaría acompañarte.
           </p>
           <p className="text-muted-foreground text-sm mb-12 font-body">
-            Currently accepting new projects — reach out and let's discuss your ideas.
+            Contactame por WhatsApp.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">Verificar disponibilidad
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="mailto:hello@example.com"
             className="bg-primary text-primary-foreground px-10 py-4 font-display text-sm tracking-wide rounded-md transition-all duration-300 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.5)] animate-pulse-glow">
-
-              hello@example.com
+              Verificar disponibilidad
             </a>
           </div>
 
           <div className="mt-8 flex items-center justify-center gap-2 text-muted-foreground text-sm">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            <span>Available for new projects</span>
+            <span>Disponible para nuevos proyectos</span>
           </div>
         </motion.div>
 
