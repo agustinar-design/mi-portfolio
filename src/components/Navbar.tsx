@@ -15,20 +15,20 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-xl border-b border-border/50">
       <div className="container flex items-center justify-between h-16 px-6 md:px-12">
         <a href="#home" className="font-display text-lg font-bold tracking-tight text-foreground">Agustina.
-          <span className="text-primary">.</span>
+          <span className="text-violet-400">.</span>
         </a>
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8">
-          {links.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="text-sm font-display text-muted-foreground hover:text-primary transition-colors duration-300"
-            >
-              {link.label}
-            </a>
-          ))}
+          {links.map((link) => {}
+
+
+
+
+
+
+
+          )}
           <a
             href="#contact"
             className="bg-primary text-primary-foreground px-5 py-2 text-sm font-display rounded-md hover:glow-violet transition-all duration-300 hover:shadow-[0_0_20px_hsl(263_70%_58%_/_0.4)]">
