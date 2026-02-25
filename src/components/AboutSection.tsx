@@ -65,8 +65,6 @@ const AboutSection = () => {
             <div className="mt-12 grid grid-cols-2 gap-6">
               {[
                 { number: "5+", label: "Años de Experiencia" },
-                { number: "200+", label: "Proyectos Completados" },
-                { number: "50+", label: "Clientes Satisfechos" },
                 { number: "∞", label: "Ideas Creativas" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center p-4 bg-card rounded-lg border border-border/50">
