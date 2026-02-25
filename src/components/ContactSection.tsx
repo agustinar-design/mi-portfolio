@@ -32,10 +32,6 @@ const ContactSection = () => {
             </a>
           </div>
 
-          <div className="mt-8 flex items-center justify-center gap-2 text-muted-foreground text-sm">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            <span>Disponible para nuevos proyectos</span>
-          </div>
         </motion.div>
 
         {/* Footer */}
