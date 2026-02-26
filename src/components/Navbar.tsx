@@ -31,7 +31,7 @@ const Navbar = () => {
           <a
             href="#contact"
             className="bg-primary text-primary-foreground px-5 py-2 text-sm font-display rounded-md transition-all duration-300 hover:shadow-[0_0_20px_hsl(263_70%_58%_/_0.4)]">
-            Hire Me
+            Charlemos
           </a>
         </div>
 
