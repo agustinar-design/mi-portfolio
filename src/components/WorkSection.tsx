@@ -115,12 +115,12 @@ const WorkSection = () => {
               className="group cursor-pointer"
             >
               <div className="relative overflow-hidden rounded-lg bg-card border border-border/50 transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.15)]">
-                <div className={`${project.video ? 'aspect-video' : 'aspect-[16/10]'} overflow-hidden`}>
+                <div className={`${project.video ? '' : 'aspect-[16/10]'} overflow-hidden ${project.video ? 'flex items-center justify-center bg-black/50' : ''}`}>
                   {project.video ? (
                     <video
                       src={project.video}
                       controls
-                      className="w-full h-full object-cover"
+                      className="max-w-full max-h-[80vh] object-contain"
                       preload="metadata"
                     />
                   ) : (
