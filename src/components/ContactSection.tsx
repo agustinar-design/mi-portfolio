@@ -21,13 +21,18 @@ const ContactSection = () => {
           <p className="text-muted-foreground text-lg mb-4 font-body">
             ¿Qué visión tenés para tu empresa? Me encantaría acompañarte.
           </p>
+          <p className="text-muted-foreground text-sm mb-4 font-body">
+            Edición de fotos y producción de video comercial para redes sociales.
+          </p>
           <p className="text-muted-foreground text-sm mb-12 font-body">
             Contactame por WhatsApp.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="mailto:hello@example.com"
-            className="bg-primary text-primary-foreground px-10 py-4 font-display text-sm tracking-wide rounded-md transition-all duration-300 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.5)] animate-pulse-glow">
+            <a href="https://api.whatsapp.com/send?phone=541165071336&text=%C2%A1Hola!%20Me%20interesa%20tu%20servicio%20como%20Creadora%20de%20Contenido%20%C2%BFPodemos%20conversar%3F%F0%9F%92%BB"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-primary text-primary-foreground px-10 py-4 font-display text-sm tracking-wide rounded-md transition-all duration-300 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.5)] animate-pulse-glow">
               Verificar disponibilidad
             </a>
           </div>
@@ -37,18 +42,16 @@ const ContactSection = () => {
         {/* Footer */}
         <div className="mt-32 pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm font-body">
-            © 2025 Studio. All rights reserved.
+            © 2026 Agustina Bernal. Todos los derechos reservados.
           </p>
           <div className="flex gap-8">
-            {["Instagram", "Behance", "Twitter", "LinkedIn"].map((link) =>
             <a
-              key={link}
-              href="#"
+              href="https://www.linkedin.com/in/agustina-bernal-331709377?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-muted-foreground text-sm hover:text-primary transition-colors duration-300 font-body">
-
-                {link}
-              </a>
-            )}
+              LinkedIn
+            </a>
           </div>
         </div>
       </div>
