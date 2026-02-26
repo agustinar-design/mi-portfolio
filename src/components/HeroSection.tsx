@@ -72,7 +72,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.25 }}>
-          Edición de fotos y producción de videos con precisión y detalle.
+          Transformo publicaciones en herramientas de venta.
         </motion.p>
 
         <motion.div
