@@ -16,7 +16,11 @@ import visual5 from "@/assets/contenido_visual_5.png";
 import visual6 from "@/assets/contenido_visual_6.png";
 import visual7 from "@/assets/contenido_visual_7.png";
 import visual8 from "@/assets/contenido_visual_8.png";
+import video1 from "@/assets/video_1.mp4";
+import video2 from "@/assets/video_2.mp4";
 import video4 from "@/assets/video_4.mp4";
+import video6 from "@/assets/video_6.mp4";
+import video8 from "@/assets/video_8.mp4";
 import video20 from "@/assets/video_20.mp4";
 
 type Category = "basic" | "elaborate" | "video";
@@ -49,8 +53,12 @@ const projects: Record<Category, { title: string; description: string; image?: s
     { title: "Universal App – Métricas Detalle", description: "Diseño mostrando métricas y funcionalidades del sistema.", image: visual8 },
   ],
   video: [
-    { title: "Universal App – Reel Promocional", description: "Video corto promocional para redes sociales.", video: video4 },
-    { title: "Universal App – Contenido Dinámico", description: "Video dinámico con animaciones y efectos visuales.", video: video20 },
+    { title: "Universal App – Reel Promocional", description: "Video corto promocional para redes sociales.", video: video1 },
+    { title: "Universal App – Contenido Dinámico", description: "Video dinámico con animaciones y efectos visuales.", video: video2 },
+    { title: "Universal App – Spot Comercial", description: "Video comercial con edición profesional.", video: video4 },
+    { title: "Universal App – Campaña Digital", description: "Producción audiovisual para campaña en redes.", video: video6 },
+    { title: "Universal App – Motion Graphics", description: "Video con motion graphics y branding.", video: video8 },
+    { title: "Universal App – Presentación Visual", description: "Video de presentación con efectos visuales.", video: video20 },
   ],
 };
 
@@ -107,7 +115,7 @@ const WorkSection = () => {
               className="group cursor-pointer"
             >
               <div className="relative overflow-hidden rounded-lg bg-card border border-border/50 transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.15)]">
-                <div className="aspect-[16/10] overflow-hidden">
+                <div className={`${project.video ? 'aspect-video' : 'aspect-[16/10]'} overflow-hidden`}>
                   {project.video ? (
                     <video
                       src={project.video}
