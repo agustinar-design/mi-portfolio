@@ -29,7 +29,7 @@ const ContactSection = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="https://api.whatsapp.com/send?phone=541165071336&text=%C2%A1Hola!%20Me%20interesa%20tu%20servicio%20como%20Creadora%20de%20Contenido%20%C2%BFPodemos%20conversar%3F%F0%9F%92%BB"
+            <a href="https://WA.link/m8tz7y"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-primary text-primary-foreground px-10 py-4 font-display text-sm tracking-wide rounded-md transition-all duration-300 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.5)] animate-pulse-glow">
