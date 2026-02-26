@@ -22,7 +22,7 @@ const ContactSection = () => {
             ¿Qué visión tenés para tu empresa? Me encantaría acompañarte.
           </p>
           <p className="text-muted-foreground text-sm mb-4 font-body">
-            Edición de fotos y producción de video comercial para redes sociales.
+            Ideal para negocios que quieren mejorar sus publicaciones sin contratar una agencia.
           </p>
           <p className="text-muted-foreground text-sm mb-12 font-body">
             Contactame por WhatsApp.
@@ -33,7 +33,7 @@ const ContactSection = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="bg-primary text-primary-foreground px-10 py-4 font-display text-sm tracking-wide rounded-md transition-all duration-300 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.5)] animate-pulse-glow">
-              Verificar disponibilidad
+              Evaluar tu perfil gratis
             </a>
           </div>
 

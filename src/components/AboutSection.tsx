@@ -1,6 +1,32 @@
 import { motion } from "framer-motion";
 
-const skills = ["Edición de Video", "Paleta de Colores", "Composición Visual", "Ritmo Audiovisual", "Análisis de Métricas", "Producción en Canva"];
+const MiniChart = () => {
+  const bars = [40, 65, 50, 80, 60, 90, 70];
+
+  return (
+    <div className="flex items-end gap-1.5 h-20 mt-6">
+      {bars.map((h, i) => (
+        <motion.div
+          key={i}
+          className="flex-1 rounded-sm bg-primary/80"
+          initial={{ height: 0, opacity: 0 }}
+          whileInView={{ height: `${h}%`, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.15 + i * 0.08, ease: "easeOut" }}
+          style={{
+            boxShadow: "0 0 10px hsl(263 70% 58% / 0.4), 0 0 20px hsl(263 70% 58% / 0.15)",
+          }}
+        >
+          <motion.div
+            className="w-full h-full rounded-sm bg-primary/80"
+            animate={{ opacity: [0.7, 1, 0.7] }}
+            transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+          />
+        </motion.div>
+      ))}
+    </div>
+  );
+};
 
 const AboutSection = () => {
   return (
@@ -19,24 +45,43 @@ const AboutSection = () => {
             <h2 className="font-display text-4xl md:text-5xl font-bold mb-8">
               Lo que me<br /><span className="text-gradient">destaca</span>
             </h2>
-            <div className="space-y-5 text-muted-foreground leading-relaxed font-body">
-              <p>
-                Me especializo en la creación de contenido visual con identidad clara y coherente.
-              </p>
-              <p>
-                Trabajo especialmente la paleta de colores, la composición y el ritmo audiovisual
-                para que cada pieza mantenga continuidad con lo que la marca busca comunicar.
-              </p>
-              <p>
-                Combino el enfoque creativo con análisis de rendimiento: evalúo métricas, comparo resultados
-                entre publicaciones y ajusto decisiones en función del comportamiento real de la audiencia.
-              </p>
-              <p>
-                Para ello utilizo las mismas estadísticas de las redes sociales (TikTok, META), Metricool, LookerStudio y Google Sheets.
-              </p>
-              <p>
-                Todo el contenido es producido y organizado en Canva para mantener consistencia visual y eficiencia de trabajo.
-              </p>
+
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-display text-lg font-semibold text-foreground mb-3">Qué hago</h3>
+                <ul className="space-y-2 text-muted-foreground font-body leading-relaxed">
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-1">—</span>
+                    Diseño publicaciones que comunican claro
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-1">—</span>
+                    Mantengo coherencia visual de marca
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-1">—</span>
+                    Analizo métricas y ajusto contenido
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="font-display text-lg font-semibold text-foreground mb-3">Cómo trabajo</h3>
+                <ul className="space-y-2 text-muted-foreground font-body leading-relaxed">
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-1">—</span>
+                    Comparo resultados reales
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-1">—</span>
+                    Optimizo según rendimiento
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-1">—</span>
+                    Organizo todo para continuidad
+                  </li>
+                </ul>
+              </div>
             </div>
           </motion.div>
 
@@ -46,23 +91,7 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.15 }}
           >
-            <p className="text-primary font-display text-sm tracking-[0.3em] uppercase mb-4">Habilidades</p>
-            <div className="flex flex-wrap gap-3 mt-8">
-              {skills.map((skill, i) => (
-                <motion.span
-                  key={skill}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: 0.2 + i * 0.05 }}
-                  className="border border-border px-5 py-2.5 font-display text-sm text-foreground rounded-md transition-all duration-300 hover:border-primary hover:text-primary hover:shadow-[0_0_15px_hsl(263_70%_58%_/_0.2)] cursor-default"
-                >
-                  {skill}
-                </motion.span>
-              ))}
-            </div>
-
-            <div className="mt-12 grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-6">
               {[
                 { number: "5+", label: "Años de Experiencia" },
                 { number: "∞", label: "Ideas Creativas" },
@@ -73,6 +102,8 @@ const AboutSection = () => {
                 </div>
               ))}
             </div>
+
+            <MiniChart />
           </motion.div>
         </div>
       </div>
