@@ -24,13 +24,13 @@ const Navbar = () => {
             <a
               key={link.label}
               href={link.href}
-              className="text-sm font-display text-muted-foreground hover:text-primary transition-colors">
+              className="text-sm font-display text-muted-foreground hover:text-primary transition-all duration-300 px-3 py-1.5 rounded-md hover:shadow-[0_0_15px_hsl(263_70%_58%_/_0.3)]">
               {link.label}
             </a>
           ))}
           <a
             href="#contact"
-            className="bg-primary text-primary-foreground px-5 py-2 text-sm font-display rounded-md transition-all duration-300 hover:shadow-[0_0_20px_hsl(263_70%_58%_/_0.4)]">
+            className="bg-primary text-primary-foreground px-5 py-2 text-sm font-display rounded-md transition-all duration-300 hover:shadow-[0_0_20px_hsl(263_70%_58%_/_0.5)] hover:brightness-110">
             Charlemos
           </a>
         </div>
@@ -61,7 +61,7 @@ const Navbar = () => {
                   key={link.label}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="text-lg font-display text-foreground hover:text-primary transition-colors">
+                  className="text-lg font-display text-foreground hover:text-primary transition-all duration-300 px-3 py-1.5 rounded-md hover:shadow-[0_0_15px_hsl(263_70%_58%_/_0.3)]">
                   {link.label}
                 </a>
               ))}

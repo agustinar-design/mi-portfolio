@@ -22,6 +22,12 @@ import video2 from "@/assets/video_2.mp4";
 import video4 from "@/assets/video_4.mp4";
 import video6 from "@/assets/video_6.mp4";
 import video8 from "@/assets/video_8.mp4";
+import video9 from "@/assets/video_9.mp4";
+import video11 from "@/assets/video_11.mp4";
+import video13 from "@/assets/video_13.mp4";
+import video15 from "@/assets/video_15.mp4";
+import video16 from "@/assets/video_16.mp4";
+import video17 from "@/assets/video_17.mp4";
 import video20 from "@/assets/video_20.mp4";
 
 type Category = "basic" | "elaborate" | "video";
@@ -59,6 +65,12 @@ const projects: Record<Category, { title: string; description: string; image?: s
     { title: "Universal App – Spot Comercial", description: "Video comercial con edición profesional.", video: video4 },
     { title: "Universal App – Campaña Digital", description: "Producción audiovisual para campaña en redes.", video: video6 },
     { title: "Universal App – Motion Graphics", description: "Video con motion graphics y branding.", video: video8 },
+    { title: "Universal App – Historia Animada", description: "Video con animaciones para historias de redes.", video: video9 },
+    { title: "Universal App – Promoción Express", description: "Contenido rápido y dinámico para redes sociales.", video: video11 },
+    { title: "Universal App – Impacto Visual", description: "Video con efectos visuales de alto impacto.", video: video13 },
+    { title: "Universal App – Branding Digital", description: "Video de branding con identidad visual.", video: video15 },
+    { title: "Universal App – Reel Creativo", description: "Reel creativo con edición dinámica.", video: video16 },
+    { title: "Universal App – Contenido Social", description: "Video optimizado para engagement en redes.", video: video17 },
     { title: "Universal App – Presentación Visual", description: "Video de presentación con efectos visuales.", video: video20 },
   ],
 };
