@@ -26,10 +26,10 @@ import video20 from "@/assets/video_20.mp4";
 
 type Category = "basic" | "elaborate" | "video";
 
-const categories: { key: Category; label: string }[] = [
-  { key: "basic", label: "Ediciones Simples" },
-  { key: "elaborate", label: "Contenido con + Detalle Visual" },
-  { key: "video", label: "Videos Para Las Redes" },
+const categories: { key: Category; label: string; subtitle: string }[] = [
+  { key: "basic", label: "Ediciones Simples", subtitle: "contenido gráfico diseñado para comunicación comercial clara y directa." },
+  { key: "elaborate", label: "Contenido +Visual", subtitle: "composiciones con más detalle y elaboración visual." },
+  { key: "video", label: "Videos Para Las Redes", subtitle: "contenido audiovisual para historias." },
 ];
 
 const projects: Record<Category, { title: string; description: string; image?: string; video?: string }[]> = {
@@ -225,6 +225,16 @@ const WorkSection = () => {
             </button>
           ))}
         </motion.div>
+
+        <motion.p
+          key={active}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="font-bold text-sm text-muted-foreground mb-8 lowercase"
+        >
+          {categories.find((c) => c.key === active)?.subtitle}
+        </motion.p>
 
         {/* View toggle */}
         <div className="flex gap-2 mb-8">
