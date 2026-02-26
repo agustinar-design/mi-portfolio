@@ -1,21 +1,34 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import workBasic from "@/assets/work-basic.png";
 import workElaborate from "@/assets/work-elaborate.png";
 import workVideo from "@/assets/work-video.png";
+import basico1 from "@/assets/contenido_basico_1.png";
+import basico2 from "@/assets/contenido_basico_2.png";
+import basico3 from "@/assets/contenido_basico_3.png";
+import basico4 from "@/assets/contenido_basico_4.png";
+import basico5 from "@/assets/contenido_basico_5.png";
+import basico6 from "@/assets/contenido_basico_6.png";
+import basico7 from "@/assets/contenido_basico_7.png";
+import basico8 from "@/assets/contenido_basico_8.png";
 
 type Category = "basic" | "elaborate" | "video";
 
 const categories: { key: Category; label: string }[] = [
-  { key: "basic", label: "Basic Edits" },
-  { key: "elaborate", label: "Elaborated Images" },
-  { key: "video", label: "Commercial Videos" },
+  { key: "basic", label: "Ediciones Simples" },
+  { key: "elaborate", label: "Contenido con + Detalle Visual" },
+  { key: "video", label: "Videos Para Las Redes" },
 ];
 
 const projects: Record<Category, { title: string; description: string; image: string }[]> = {
   basic: [
-    { title: "Portrait Retouching", description: "Color correction, skin retouching, and lighting adjustments for professional portraits.", image: workBasic },
-    { title: "Product Enhancement", description: "Clean background removal and color grading for e-commerce ready images.", image: workBasic },
+    { title: "Universal App – Sistema", description: "Diseño de contenido visual para sistema de gestión comercial.", image: basico1 },
+    { title: "Universal App – Métricas", description: "Pieza promocional destacando funcionalidades y métricas.", image: basico2 },
+    { title: "Universal App – Gestión", description: "Contenido visual para mostrar módulos de gestión.", image: basico3 },
+    { title: "Universal App – Funciones", description: "Diseño destacando funciones ilimitadas y escalabilidad.", image: basico4 },
+    { title: "Universal App – Ventas", description: "Pieza horizontal para sistema de ventas y contabilidad.", image: basico5 },
+    { title: "Universal App – Seguridad", description: "Contenido visual sobre copias de seguridad y planes.", image: basico6 },
+    { title: "Universal App – Potenciá", description: "Diseño motivacional para digitalización de negocios.", image: basico7 },
+    { title: "Universal App – Éxito", description: "Pieza promocional con llamado a la acción.", image: basico8 },
   ],
   elaborate: [
     { title: "Fantasy Landscape", description: "Full composite photo manipulation creating immersive fantasy worlds from scratch.", image: workElaborate },
