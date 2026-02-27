@@ -4,15 +4,16 @@ const MiniChart = () => {
   const bars = [40, 65, 50, 80, 60, 90, 70];
 
   return (
-    <div className="flex items-end gap-1.5 h-20 mt-6">
+    <div className="flex items-end gap-1.5 h-20 mt-6 group cursor-pointer">
       {bars.map((h, i) => (
         <motion.div
           key={i}
-          className="flex-1 rounded-sm bg-primary/80"
+          className="flex-1 rounded-sm bg-primary/80 transition-all duration-300 group-hover:shadow-[0_0_14px_hsl(263_70%_58%_/_0.6),0_0_30px_hsl(263_70%_58%_/_0.25)]"
           initial={{ height: 0, opacity: 0 }}
           whileInView={{ height: `${h}%`, opacity: 1 }}
+          whileHover={{ height: `${Math.min(h + 20, 100)}%` }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.15 + i * 0.08, ease: "easeOut" }}
+          transition={{ duration: 0.4, delay: 0.15 + i * 0.08, ease: "easeOut" }}
           style={{
             boxShadow: "0 0 10px hsl(263 70% 58% / 0.4), 0 0 20px hsl(263 70% 58% / 0.15)",
           }}

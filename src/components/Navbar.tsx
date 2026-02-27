@@ -14,8 +14,7 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-xl border-b border-border/50">
       <div className="container flex items-center justify-between h-16 px-6 md:px-12">
-        <a href="#home" className="font-display text-lg font-bold tracking-tight text-foreground">Agustina Bernal .
-          <span className="text-primary">.</span>
+        <a href="#home" className="font-display text-lg font-bold tracking-tight text-foreground">Agustina Bernal<span className="text-primary">.</span>
         </a>
 
         {/* Desktop */}
