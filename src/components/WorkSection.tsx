@@ -1,5 +1,6 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import basico1 from "@/assets/contenido_basico_1.png";
 import basico2 from "@/assets/contenido_basico_2.png";
@@ -198,6 +199,29 @@ const HorizontalCarousel = ({ items }: { items: { title: string; description: st
 const WorkSection = () => {
   const [active, setActive] = useState<Category>("basic");
   const [viewMode, setViewMode] = useState<"carousel" | "scroll">("carousel");
+  const [dbItems, setDbItems] = useState<{ title: string; description: string; image?: string; video?: string }[]>([]);
+
+  useEffect(() => {
+    const fetchDbItems = async () => {
+      const { data } = await supabase
+        .from("portfolio_items")
+        .select("*")
+        .eq("category", active)
+        .order("display_order", { ascending: true });
+      if (data) {
+        setDbItems(
+          data.map((item: any) => ({
+            title: item.title,
+            description: item.description,
+            ...(item.file_type === "video" ? { video: item.file_url } : { image: item.file_url }),
+          }))
+        );
+      }
+    };
+    fetchDbItems();
+  }, [active]);
+
+  const allItems = [...projects[active], ...dbItems];
 
   return (
     <section id="work" className="py-32 px-6 md:px-12 relative">
@@ -274,10 +298,10 @@ const WorkSection = () => {
 
         {/* Content */}
         {viewMode === "carousel" ? (
-          <HorizontalCarousel items={projects[active]} />
+          <HorizontalCarousel items={allItems} />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects[active].map((project, i) => (
+            {allItems.map((project, i) => (
               <ScrollCard key={`${active}-${i}`} project={project} index={i} />
             ))}
           </div>
