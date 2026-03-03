@@ -4,9 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import { Trash2, Upload, LogOut, ArrowLeft } from "lucide-react";
-
-type Category = "basic" | "elaborate" | "video";
+import { Trash2, Upload, LogOut, ArrowLeft, EyeOff, Eye } from "lucide-react";
+import { staticPortfolioItems, categoryLabels, type Category, type StaticPortfolioItem } from "@/data/staticPortfolioItems";
 
 interface PortfolioItem {
   id: string;
@@ -19,12 +18,6 @@ interface PortfolioItem {
   created_at: string;
 }
 
-const categoryLabels: Record<Category, string> = {
-  basic: "Ediciones Simples",
-  elaborate: "Contenido +Visual",
-  video: "Videos Para Las Redes",
-};
-
 const Admin = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -33,6 +26,7 @@ const Admin = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [hiddenKeys, setHiddenKeys] = useState<Set<string>>(new Set());
   const fileRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
@@ -54,6 +48,15 @@ const Admin = () => {
     fetchItems();
   }, [activeTab]);
 
+  useEffect(() => {
+    fetchHiddenKeys();
+  }, []);
+
+  const fetchHiddenKeys = async () => {
+    const { data } = await supabase.from("hidden_static_items").select("item_key");
+    if (data) setHiddenKeys(new Set(data.map((d: any) => d.item_key)));
+  };
+
   const fetchItems = async () => {
     const { data } = await supabase
       .from("portfolio_items")
@@ -69,7 +72,6 @@ const Admin = () => {
       toast({ title: "Error", description: "Seleccioná un archivo y escribí un título.", variant: "destructive" });
       return;
     }
-
     setUploading(true);
     const ext = file.name.split(".").pop();
     const path = `${activeTab}/${Date.now()}.${ext}`;
@@ -83,7 +85,6 @@ const Admin = () => {
     }
 
     const { data: urlData } = supabase.storage.from("portfolio").getPublicUrl(path);
-
     const { error: insertError } = await supabase.from("portfolio_items").insert({
       user_id: user.id,
       category: activeTab,
@@ -107,10 +108,8 @@ const Admin = () => {
   };
 
   const handleDelete = async (item: PortfolioItem) => {
-    // Extract storage path from URL
     const urlParts = item.file_url.split("/portfolio/");
     const storagePath = urlParts[urlParts.length - 1];
-
     await supabase.storage.from("portfolio").remove([storagePath]);
     const { error } = await supabase.from("portfolio_items").delete().eq("id", item.id);
     if (error) {
@@ -121,12 +120,38 @@ const Admin = () => {
     }
   };
 
+  const handleHideStatic = async (key: string) => {
+    const { error } = await supabase.from("hidden_static_items").insert({ item_key: key });
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      setHiddenKeys((prev) => new Set([...prev, key]));
+      toast({ title: "Oculto", description: "El contenido ya no se muestra en el portfolio." });
+    }
+  };
+
+  const handleShowStatic = async (key: string) => {
+    const { error } = await supabase.from("hidden_static_items").delete().eq("item_key", key);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      setHiddenKeys((prev) => {
+        const next = new Set(prev);
+        next.delete(key);
+        return next;
+      });
+      toast({ title: "Visible", description: "El contenido se muestra nuevamente." });
+    }
+  };
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate("/login");
   };
 
   if (loading) return <div className="min-h-screen bg-background flex items-center justify-center text-foreground">Cargando...</div>;
+
+  const staticItems = staticPortfolioItems[activeTab];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -176,10 +201,49 @@ const Admin = () => {
           </Button>
         </div>
 
-        {/* Items list */}
+        {/* Static items (initial content) */}
         <div className="space-y-4">
           <h2 className="font-display text-lg font-semibold">
-            {categoryLabels[activeTab]} ({items.length})
+            Contenido inicial – {categoryLabels[activeTab]} ({staticItems.length})
+          </h2>
+          <p className="text-muted-foreground text-xs">Podés ocultar o mostrar cada pieza. Los ocultos no aparecen en tu portfolio.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {staticItems.map((item) => {
+              const isHidden = hiddenKeys.has(item.key);
+              return (
+                <div key={item.key} className={`bg-card border rounded-xl overflow-hidden transition-all duration-300 ${isHidden ? "border-destructive/30 opacity-50" : "border-border/50"}`}>
+                  <div className="aspect-square bg-black/30 flex items-center justify-center p-2">
+                    {item.video ? (
+                      <video src={item.video} controls className="max-w-full max-h-full object-contain rounded-lg" preload="metadata" />
+                    ) : (
+                      <img src={item.image} alt={item.title} className="max-w-full max-h-full object-contain rounded-lg" loading="lazy" />
+                    )}
+                  </div>
+                  <div className="p-4 flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="font-display text-sm font-semibold truncate">{item.title}</p>
+                      {item.description && <p className="text-muted-foreground text-xs truncate">{item.description}</p>}
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`shrink-0 ${isHidden ? "text-primary hover:text-primary" : "text-destructive hover:text-destructive"}`}
+                      onClick={() => isHidden ? handleShowStatic(item.key) : handleHideStatic(item.key)}
+                      title={isHidden ? "Mostrar en portfolio" : "Ocultar del portfolio"}
+                    >
+                      {isHidden ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* DB uploaded items */}
+        <div className="space-y-4">
+          <h2 className="font-display text-lg font-semibold">
+            Subidos por vos – {categoryLabels[activeTab]} ({items.length})
           </h2>
           {items.length === 0 && (
             <p className="text-muted-foreground text-sm">No hay archivos subidos en esta categoría aún.</p>

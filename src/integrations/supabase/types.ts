@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      hidden_static_items: {
+        Row: {
+          hidden_at: string
+          id: string
+          item_key: string
+        }
+        Insert: {
+          hidden_at?: string
+          id?: string
+          item_key: string
+        }
+        Update: {
+          hidden_at?: string
+          id?: string
+          item_key?: string
+        }
+        Relationships: []
+      }
       portfolio_items: {
         Row: {
           category: string
