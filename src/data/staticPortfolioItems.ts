@@ -27,7 +27,7 @@ import video16 from "@/assets/video_16.mp4";
 import video17 from "@/assets/video_17.mp4";
 import video20 from "@/assets/video_20.mp4";
 
-export type Category = "basic" | "elaborate" | "video";
+export type Category = "images" | "video";
 
 export interface StaticPortfolioItem {
   key: string;
@@ -38,13 +38,12 @@ export interface StaticPortfolioItem {
 }
 
 export const categoryLabels: Record<Category, string> = {
-  basic: "Ediciones Simples",
-  elaborate: "Contenido +Visual",
-  video: "Videos Para Las Redes",
+  images: "Imágenes",
+  video: "Videos",
 };
 
 export const staticPortfolioItems: Record<Category, StaticPortfolioItem[]> = {
-  basic: [
+  images: [
     { key: "basic-1", title: "Universal App – Sistema", description: "Diseño de contenido visual para sistema de gestión comercial.", image: basico1 },
     { key: "basic-2", title: "Universal App – Métricas", description: "Pieza promocional destacando funcionalidades y métricas.", image: basico2 },
     { key: "basic-3", title: "Universal App – Gestión", description: "Contenido visual para mostrar módulos de gestión.", image: basico3 },
@@ -53,8 +52,6 @@ export const staticPortfolioItems: Record<Category, StaticPortfolioItem[]> = {
     { key: "basic-6", title: "Universal App – Seguridad", description: "Contenido visual sobre copias de seguridad y planes.", image: basico6 },
     { key: "basic-7", title: "Universal App – Potenciá", description: "Diseño motivacional para digitalización de negocios.", image: basico7 },
     { key: "basic-8", title: "Universal App – Éxito", description: "Pieza promocional con llamado a la acción.", image: basico8 },
-  ],
-  elaborate: [
     { key: "elaborate-1", title: "Universal App – Asesoría y Ventas", description: "Diseño visual con identidad de marca y datos de contacto.", image: visual1 },
     { key: "elaborate-2", title: "Universal App – Página Web", description: "Contenido promocional para negocio organizado con web propia.", image: visual2 },
     { key: "elaborate-3", title: "Universal App – Agradecimiento", description: "Pieza circular de agradecimiento con branding de marca.", image: visual3 },

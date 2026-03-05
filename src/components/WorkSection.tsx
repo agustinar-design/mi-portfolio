@@ -5,9 +5,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { staticPortfolioItems, categoryLabels, type Category } from "@/data/staticPortfolioItems";
 
 const categories: { key: Category; label: string; subtitle: string }[] = [
-  { key: "basic", label: "Ediciones Simples", subtitle: "contenido gráfico diseñado para comunicación comercial clara y directa." },
-  { key: "elaborate", label: "Contenido +Visual", subtitle: "composiciones con más detalle y elaboración visual." },
-  { key: "video", label: "Videos Para Las Redes", subtitle: "contenido audiovisual para historias." },
+  { key: "images", label: "Imágenes", subtitle: "contenido gráfico diseñado para comunicación comercial clara y directa." },
+  { key: "video", label: "Videos", subtitle: "contenido audiovisual para historias." },
 ];
 
 const ScrollCard = ({ project, index }: { project: { title: string; description: string; image?: string; video?: string }; index: number }) => {
@@ -83,7 +82,7 @@ const HorizontalCarousel = ({ items }: { items: { title: string; description: st
 };
 
 const WorkSection = () => {
-  const [active, setActive] = useState<Category>("basic");
+  const [active, setActive] = useState<Category>("images");
   const [viewMode, setViewMode] = useState<"carousel" | "scroll">("carousel");
   const [dbItems, setDbItems] = useState<{ title: string; description: string; image?: string; video?: string }[]>([]);
   const [hiddenKeys, setHiddenKeys] = useState<Set<string>>(new Set());
