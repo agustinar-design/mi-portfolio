@@ -22,7 +22,7 @@ const Admin = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState<PortfolioItem[]>([]);
-  const [activeTab, setActiveTab] = useState<Category>("basic");
+  const [activeTab, setActiveTab] = useState<Category>("images");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
