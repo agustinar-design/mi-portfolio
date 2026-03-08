@@ -270,9 +270,12 @@ const Admin = () => {
                 </div>
               </div>
             ))}
-          </div>
         </div>
+
+        {/* Before & After */}
+        <BeforeAfterAdmin userId={user.id} />
       </div>
+    </div>
     </div>
   );
 };
