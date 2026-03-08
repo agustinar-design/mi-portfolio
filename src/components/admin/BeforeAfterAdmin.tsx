@@ -280,11 +280,17 @@ const BeforeAfterAdmin = ({ userId }: { userId: string }) => {
             const afterImgs = item.images.filter((img) => img.image_type === "after");
             return (
               <div key={item.id} className="bg-card border border-border/50 rounded-xl overflow-hidden">
-                <div className="p-4 flex items-center justify-between">
-                  <p className="font-display text-sm font-semibold">{item.brand_name}</p>
-                  <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" onClick={() => handleDeleteItem(item)}>
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                <div className="p-4 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <p className="font-display text-sm font-semibold">{item.brand_name}</p>
+                    <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" onClick={() => handleDeleteItem(item)}>
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  {item.description && (
+                    <p className="text-xs text-muted-foreground italic">{item.description}</p>
+                  )}
+                  <EditableDescription itemId={item.id} currentDescription={item.description} onUpdate={fetchItems} />
                 </div>
                 <div className="grid grid-cols-2 gap-4 px-4 pb-4">
                   {/* Before column */}
