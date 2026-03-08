@@ -125,9 +125,7 @@ const PricingSection = () => {
                   {plan.audience.map((item, i) => (
                     <li key={i} className="flex items-start gap-3 font-body text-sm leading-relaxed">
                       <span className="text-primary mt-0.5 shrink-0">•</span>
-                      <span className={item.highlight ? "text-primary font-medium" : "text-foreground"}>
-                        {item.text}
-                      </span>
+                      <HighlightedText text={item.text} highlights={item.highlights} />
                     </li>
                   ))}
                 </ul>
