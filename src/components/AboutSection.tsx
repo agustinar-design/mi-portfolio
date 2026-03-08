@@ -53,15 +53,15 @@ const AboutSection = () => {
                 <ul className="space-y-2 text-muted-foreground font-body leading-relaxed">
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-1">—</span>
-                    Diseño publicaciones que comunican claro
+                    Diseño contenido visual para redes sociales
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-1">—</span>
-                    Mantengo coherencia visual de marca
+                    Construyo identidad estética para marcas
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-1">—</span>
-                    Analizo métricas y ajusto contenido
+                    Organizo perfiles para que comuniquen mejor
                   </li>
                 </ul>
               </div>
@@ -71,15 +71,49 @@ const AboutSection = () => {
                 <ul className="space-y-2 text-muted-foreground font-body leading-relaxed">
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-1">—</span>
-                    Comparo resultados reales
+                    Analizo el perfil actual
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-1">—</span>
-                    Optimizo según rendimiento
+                    Defino objetivos de contenido
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-1">—</span>
-                    Organizo todo para continuidad
+                    Diseño una estructura visual coherente
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-1">—</span>
+                    Ajusto según métricas
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="font-display text-lg font-semibold text-foreground mb-3">Servicios</h3>
+                <ul className="space-y-2 text-muted-foreground font-body leading-relaxed">
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-1">—</span>
+                    Diseño de contenido para redes sociales
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-1">—</span>
+                    Optimización visual de perfiles
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-1">—</span>
+                    Estrategia de contenido mensual
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-1">—</span>
+                    Organización estética de feed
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-1">—</span>
+                    Creación de reels y piezas visuales
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-1">—</span>
+                    Landing pages para conversión
                   </li>
                 </ul>
               </div>
@@ -107,6 +141,19 @@ const AboutSection = () => {
             <MiniChart />
           </motion.div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mt-16 text-center"
+        >
+          <blockquote className="font-display text-xl md:text-2xl text-muted-foreground italic leading-relaxed max-w-3xl mx-auto">
+            "Si todas las marcas comunican igual, ninguna destaca. Mi trabajo es construir una presencia visual que se vea{" "}
+            <span className="text-primary font-semibold not-italic">diferente</span>."
+          </blockquote>
+        </motion.div>
       </div>
     </section>
   );
