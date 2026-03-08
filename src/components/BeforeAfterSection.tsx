@@ -93,6 +93,11 @@ const BeforeAfterSection = () => {
                   <h3 className="font-display text-xl font-semibold text-primary">
                     {item.brand_name}
                   </h3>
+                  {item.description && (
+                    <p className="text-muted-foreground text-sm leading-relaxed max-w-2xl">
+                      {item.description}
+                    </p>
+                  )}
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {beforeImgs.length > 0 && (

@@ -20,6 +20,35 @@ interface BeforeAfterItem {
   images: BeforeAfterImage[];
 }
 
+const InlineDescriptionEditor = ({ itemId, currentDescription, onUpdate }: { itemId: string; currentDescription: string; onUpdate: () => void }) => {
+  const [editing, setEditing] = useState(false);
+  const [value, setValue] = useState(currentDescription);
+
+  const save = async () => {
+    const { error } = await supabase.from("before_after_items").update({ description: value.trim() }).eq("id", itemId);
+    if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
+    setEditing(false);
+    onUpdate();
+  };
+
+  if (editing) {
+    return (
+      <div className="flex gap-2 items-start">
+        <textarea value={value} onChange={(e) => setValue(e.target.value)} rows={2} className="flex-1 rounded-md border border-input bg-background px-2 py-1 text-xs ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none" />
+        <button onClick={save} className="text-primary hover:text-primary/80"><Check className="w-4 h-4" /></button>
+        <button onClick={() => { setEditing(false); setValue(currentDescription); }} className="text-muted-foreground hover:text-foreground"><X className="w-4 h-4" /></button>
+      </div>
+    );
+  }
+
+  return (
+    <button onClick={() => setEditing(true)} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
+      <Pencil className="w-3 h-3" />
+      {currentDescription ? <span className="italic">{currentDescription}</span> : <span>Agregar descripción</span>}
+    </button>
+  );
+};
+
 const BeforeAfterAdmin = ({ userId }: { userId: string }) => {
   const [items, setItems] = useState<BeforeAfterItem[]>([]);
   const [brandName, setBrandName] = useState("");
