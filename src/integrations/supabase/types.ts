@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      before_after_items: {
+        Row: {
+          after_image_url: string
+          before_image_url: string
+          brand_name: string
+          created_at: string
+          display_order: number
+          id: string
+          user_id: string
+        }
+        Insert: {
+          after_image_url: string
+          before_image_url: string
+          brand_name: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          user_id: string
+        }
+        Update: {
+          after_image_url?: string
+          before_image_url?: string
+          brand_name?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       hidden_static_items: {
         Row: {
           hidden_at: string

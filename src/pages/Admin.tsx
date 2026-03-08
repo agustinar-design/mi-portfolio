@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { Trash2, Upload, LogOut, ArrowLeft, EyeOff, Eye } from "lucide-react";
 import { staticPortfolioItems, categoryLabels, type Category, type StaticPortfolioItem } from "@/data/staticPortfolioItems";
+import BeforeAfterAdmin from "@/components/admin/BeforeAfterAdmin";
 
 interface PortfolioItem {
   id: string;
@@ -269,9 +270,12 @@ const Admin = () => {
                 </div>
               </div>
             ))}
-          </div>
         </div>
+
+        {/* Before & After */}
+        <BeforeAfterAdmin userId={user.id} />
       </div>
+    </div>
     </div>
   );
 };
