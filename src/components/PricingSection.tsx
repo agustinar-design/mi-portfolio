@@ -104,7 +104,7 @@ const PricingSection = () => {
                   {plan.items.map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-muted-foreground font-body text-sm leading-relaxed">
                       <span className="text-primary mt-0.5 shrink-0">•</span>
-                      {item}
+                      <HighlightedText text={item.text} highlights={item.highlights} />
                     </li>
                   ))}
                 </ul>
