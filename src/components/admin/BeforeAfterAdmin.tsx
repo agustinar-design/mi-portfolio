@@ -52,6 +52,7 @@ const BeforeAfterAdmin = ({ userId }: { userId: string }) => {
     const enriched: BeforeAfterItem[] = (itemsData as any[]).map((item) => ({
       id: item.id,
       brand_name: item.brand_name,
+      description: item.description || "",
       display_order: item.display_order,
       images: images.filter((img: any) => img.item_id === item.id),
     }));
