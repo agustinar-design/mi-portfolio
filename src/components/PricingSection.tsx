@@ -120,6 +120,7 @@ const PricingSection = () => {
                   boxShadow: "0 0 20px hsl(263 70% 58% / 0.1)",
                 }}
               >
+                <p className="font-display text-sm font-semibold text-foreground mb-4">{plan.audienceTitle}</p>
                 <ul className="space-y-3">
                   {plan.audience.map((item, i) => (
                     <li key={i} className="flex items-start gap-3 font-body text-sm leading-relaxed">
