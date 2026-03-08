@@ -1,0 +1,1 @@
+ALTER TABLE public.before_after_items ADD COLUMN description text NOT NULL DEFAULT '';
