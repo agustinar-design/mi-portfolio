@@ -28,10 +28,10 @@ const plans = [
     name: "Plan Expansión Digital",
     subtitle: "Incluye todo lo anterior +:",
     items: [
-      "Análisis de la competencia",
-      "Optimización más profunda de las métricas",
-      "Ajuste estratégico quincenal",
-      "Landing page personalizada alineada a la identidad de la marca, con presentación del negocio, servicios/productos, formulario de contacto, botón directo a WhatsApp y adaptada a celular",
+      { text: "Análisis de la competencia", highlights: [] },
+      { text: "Optimización más profunda de las métricas", highlights: [] },
+      { text: "Ajuste estratégico quincenal", highlights: [] },
+      { text: "Landing page personalizada alineada a la identidad de la marca, con presentación del negocio, servicios/productos, formulario de contacto, botón directo a WhatsApp y adaptada a celular", highlights: ["Landing page"] },
     ],
     audienceTitle: "Para negocios que buscan escalar y convertir:",
     audience: [
