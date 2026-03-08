@@ -23,6 +23,7 @@ interface BeforeAfterItem {
 const BeforeAfterAdmin = ({ userId }: { userId: string }) => {
   const [items, setItems] = useState<BeforeAfterItem[]>([]);
   const [brandName, setBrandName] = useState("");
+  const [description, setDescription] = useState("");
   const [beforeFiles, setBeforeFiles] = useState<File[]>([]);
   const [afterFiles, setAfterFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
