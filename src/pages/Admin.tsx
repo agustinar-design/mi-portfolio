@@ -202,6 +202,9 @@ const Admin = () => {
           </Button>
         </div>
 
+        {/* Before & After - prominent section */}
+        <BeforeAfterAdmin userId={user.id} />
+
         {/* Static items (initial content) */}
         <div className="space-y-4">
           <h2 className="font-display text-lg font-semibold">
