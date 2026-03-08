@@ -15,6 +15,7 @@ const plans = [
       "Ajustes según rendimiento",
       "Reunión mensual (opcional) o PDF simple con resumen de métricas, lo que funcionó mejor, lo que ajustamos, propuesta para el mes siguiente",
     ],
+    audienceTitle: "Ideal para marcas y emprendimientos que:",
     audience: [
       { text: "Quieren ordenar su presencia digital", highlight: false },
       { text: "Necesitan una identidad clara y profesional", highlight: false },
@@ -32,6 +33,7 @@ const plans = [
       "Ajuste estratégico quincenal",
       "Landing page personalizada alineada a la identidad de la marca, con presentación del negocio, servicios/productos, formulario de contacto, botón directo a WhatsApp y adaptada a celular",
     ],
+    audienceTitle: "Para negocios que buscan escalar y convertir:",
     audience: [
       { text: "Y quieren ir un paso más allá", highlight: false },
       { text: "Buscan posicionarse con mayor autoridad", highlight: false },
@@ -118,6 +120,7 @@ const PricingSection = () => {
                   boxShadow: "0 0 20px hsl(263 70% 58% / 0.1)",
                 }}
               >
+                <p className="font-display text-sm font-semibold text-foreground mb-4">{plan.audienceTitle}</p>
                 <ul className="space-y-3">
                   {plan.audience.map((item, i) => (
                     <li key={i} className="flex items-start gap-3 font-body text-sm leading-relaxed">
