@@ -44,6 +44,42 @@ const plans = [
   },
 ];
 
+const HighlightedText = ({ text, highlights }: { text: string; highlights: string[] }) => {
+  if (highlights.length === 0) return <span className="text-foreground">{text}</span>;
+  
+  let result: React.ReactNode[] = [];
+  let remaining = text;
+  let key = 0;
+  
+  while (remaining.length > 0) {
+    let earliestIndex = remaining.length;
+    let earliestHighlight = "";
+    
+    for (const h of highlights) {
+      const idx = remaining.toLowerCase().indexOf(h.toLowerCase());
+      if (idx !== -1 && idx < earliestIndex) {
+        earliestIndex = idx;
+        earliestHighlight = h;
+      }
+    }
+    
+    if (earliestHighlight === "") {
+      result.push(<span key={key}>{remaining}</span>);
+      break;
+    }
+    
+    if (earliestIndex > 0) {
+      result.push(<span key={key}>{remaining.slice(0, earliestIndex)}</span>);
+      key++;
+    }
+    result.push(<span key={key} className="text-primary font-medium">{remaining.slice(earliestIndex, earliestIndex + earliestHighlight.length)}</span>);
+    key++;
+    remaining = remaining.slice(earliestIndex + earliestHighlight.length);
+  }
+  
+  return <span>{result}</span>;
+};
+
 const FloatingIcons = ({ icons, side }: { icons: React.ElementType[]; side: "left" | "right" }) => (
   <div className={`absolute ${side === "left" ? "-bottom-6 -right-6" : "-bottom-6 -right-6"} flex gap-2`}>
     {icons.map((Icon, i) => (
