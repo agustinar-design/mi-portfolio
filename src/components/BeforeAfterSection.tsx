@@ -13,6 +13,7 @@ interface BeforeAfterImage {
 interface BeforeAfterItem {
   id: string;
   brand_name: string;
+  description: string;
   display_order: number;
   images: BeforeAfterImage[];
 }
