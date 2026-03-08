@@ -105,6 +105,7 @@ const BeforeAfterAdmin = ({ userId }: { userId: string }) => {
         .insert({
           user_id: userId,
           brand_name: brandName.trim(),
+          description: description.trim(),
           before_image_url: "",
           after_image_url: "",
           display_order: items.length,
