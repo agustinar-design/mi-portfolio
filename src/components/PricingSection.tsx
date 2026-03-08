@@ -15,6 +15,7 @@ const plans = [
       "Ajustes según rendimiento",
       "Reunión mensual (opcional) o PDF simple con resumen de métricas, lo que funcionó mejor, lo que ajustamos, propuesta para el mes siguiente",
     ],
+    audienceTitle: "Ideal para marcas y emprendimientos que:",
     audience: [
       { text: "Quieren ordenar su presencia digital", highlight: false },
       { text: "Necesitan una identidad clara y profesional", highlight: false },
