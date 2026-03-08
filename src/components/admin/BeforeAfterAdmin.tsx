@@ -136,6 +136,7 @@ const BeforeAfterAdmin = ({ userId }: { userId: string }) => {
 
       toast({ title: "¡Subido!", description: `${imageRecords.length} imagen(es) agregadas.` });
       setBrandName("");
+      setDescription("");
       setBeforeFiles([]);
       setAfterFiles([]);
       if (beforeRef.current) beforeRef.current.value = "";
