@@ -14,6 +14,41 @@ export type Database = {
   }
   public: {
     Tables: {
+      before_after_images: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          image_type: string
+          image_url: string
+          item_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_type: string
+          image_url: string
+          item_id: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_type?: string
+          image_url?: string
+          item_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "before_after_images_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "before_after_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       before_after_items: {
         Row: {
           after_image_url: string
@@ -25,8 +60,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          after_image_url: string
-          before_image_url: string
+          after_image_url?: string
+          before_image_url?: string
           brand_name: string
           created_at?: string
           display_order?: number
