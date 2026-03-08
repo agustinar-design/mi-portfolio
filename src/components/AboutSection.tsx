@@ -94,35 +94,6 @@ const AboutSection = () => {
                 </ul>
               </div>
 
-              <div>
-                <h3 className="font-display text-lg font-semibold text-foreground mb-3">Servicios</h3>
-                <ul className="space-y-2 text-muted-foreground font-body leading-relaxed">
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">—</span>
-                    Diseño de contenido para redes sociales
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">—</span>
-                    Optimización visual de perfiles
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">—</span>
-                    Estrategia de contenido mensual
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">—</span>
-                    Organización estética de feed
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">—</span>
-                    Creación de reels y piezas visuales
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">—</span>
-                    Landing pages para conversión
-                  </li>
-                </ul>
-              </div>
             </div>
           </motion.div>
 
