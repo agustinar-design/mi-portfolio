@@ -52,7 +52,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}>
-          CREADORA DE CONTENIDO
+          SOCIAL MEDIA CREATIVA
         </motion.p>
 
         <motion.h1
