@@ -65,7 +65,7 @@ const MiniChart = () => {
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
           <span className="text-[10px] font-display text-muted-foreground/60">En vivo</span>
         </motion.div>
       </div>
