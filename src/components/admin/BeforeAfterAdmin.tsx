@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import { Trash2, Upload, Plus, X } from "lucide-react";
+import { Trash2, Upload, Plus, X, Pencil, Check } from "lucide-react";
 
 interface BeforeAfterImage {
   id: string;
@@ -15,13 +15,44 @@ interface BeforeAfterImage {
 interface BeforeAfterItem {
   id: string;
   brand_name: string;
+  description: string;
   display_order: number;
   images: BeforeAfterImage[];
 }
 
+const InlineDescriptionEditor = ({ itemId, currentDescription, onUpdate }: { itemId: string; currentDescription: string; onUpdate: () => void }) => {
+  const [editing, setEditing] = useState(false);
+  const [value, setValue] = useState(currentDescription);
+
+  const save = async () => {
+    const { error } = await supabase.from("before_after_items").update({ description: value.trim() }).eq("id", itemId);
+    if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
+    setEditing(false);
+    onUpdate();
+  };
+
+  if (editing) {
+    return (
+      <div className="flex gap-2 items-start">
+        <textarea value={value} onChange={(e) => setValue(e.target.value)} rows={2} className="flex-1 rounded-md border border-input bg-background px-2 py-1 text-xs ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none" />
+        <button onClick={save} className="text-primary hover:text-primary/80"><Check className="w-4 h-4" /></button>
+        <button onClick={() => { setEditing(false); setValue(currentDescription); }} className="text-muted-foreground hover:text-foreground"><X className="w-4 h-4" /></button>
+      </div>
+    );
+  }
+
+  return (
+    <button onClick={() => setEditing(true)} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors">
+      <Pencil className="w-3 h-3" />
+      {currentDescription ? <span className="italic">{currentDescription}</span> : <span>Agregar descripción</span>}
+    </button>
+  );
+};
+
 const BeforeAfterAdmin = ({ userId }: { userId: string }) => {
   const [items, setItems] = useState<BeforeAfterItem[]>([]);
   const [brandName, setBrandName] = useState("");
+  const [description, setDescription] = useState("");
   const [beforeFiles, setBeforeFiles] = useState<File[]>([]);
   const [afterFiles, setAfterFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -50,6 +81,7 @@ const BeforeAfterAdmin = ({ userId }: { userId: string }) => {
     const enriched: BeforeAfterItem[] = (itemsData as any[]).map((item) => ({
       id: item.id,
       brand_name: item.brand_name,
+      description: item.description || "",
       display_order: item.display_order,
       images: images.filter((img: any) => img.item_id === item.id),
     }));
@@ -102,6 +134,7 @@ const BeforeAfterAdmin = ({ userId }: { userId: string }) => {
         .insert({
           user_id: userId,
           brand_name: brandName.trim(),
+          description: description.trim(),
           before_image_url: "",
           after_image_url: "",
           display_order: items.length,
@@ -132,6 +165,7 @@ const BeforeAfterAdmin = ({ userId }: { userId: string }) => {
 
       toast({ title: "¡Subido!", description: `${imageRecords.length} imagen(es) agregadas.` });
       setBrandName("");
+      setDescription("");
       setBeforeFiles([]);
       setAfterFiles([]);
       if (beforeRef.current) beforeRef.current.value = "";
@@ -207,6 +241,13 @@ const BeforeAfterAdmin = ({ userId }: { userId: string }) => {
           value={brandName}
           onChange={(e) => setBrandName(e.target.value)}
         />
+        <textarea
+          placeholder="Descripción del resultado (ej: De feed sin identidad visual a contenido alineado con marca...)"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={2}
+          className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 resize-none"
+        />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Before files */}
           <div className="space-y-2">
@@ -268,11 +309,14 @@ const BeforeAfterAdmin = ({ userId }: { userId: string }) => {
             const afterImgs = item.images.filter((img) => img.image_type === "after");
             return (
               <div key={item.id} className="bg-card border border-border/50 rounded-xl overflow-hidden">
-                <div className="p-4 flex items-center justify-between">
-                  <p className="font-display text-sm font-semibold">{item.brand_name}</p>
-                  <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" onClick={() => handleDeleteItem(item)}>
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                <div className="p-4 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <p className="font-display text-sm font-semibold">{item.brand_name}</p>
+                    <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" onClick={() => handleDeleteItem(item)}>
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <InlineDescriptionEditor itemId={item.id} currentDescription={item.description} onUpdate={fetchItems} />
                 </div>
                 <div className="grid grid-cols-2 gap-4 px-4 pb-4">
                   {/* Before column */}

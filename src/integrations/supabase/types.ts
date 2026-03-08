@@ -55,6 +55,7 @@ export type Database = {
           before_image_url: string
           brand_name: string
           created_at: string
+          description: string
           display_order: number
           id: string
           user_id: string
@@ -64,6 +65,7 @@ export type Database = {
           before_image_url?: string
           brand_name: string
           created_at?: string
+          description?: string
           display_order?: number
           id?: string
           user_id: string
@@ -73,6 +75,7 @@ export type Database = {
           before_image_url?: string
           brand_name?: string
           created_at?: string
+          description?: string
           display_order?: number
           id?: string
           user_id?: string

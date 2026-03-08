@@ -13,6 +13,7 @@ interface BeforeAfterImage {
 interface BeforeAfterItem {
   id: string;
   brand_name: string;
+  description: string;
   display_order: number;
   images: BeforeAfterImage[];
 }
@@ -40,6 +41,7 @@ const BeforeAfterSection = () => {
       const enriched: BeforeAfterItem[] = (itemsData as any[]).map((item) => ({
         id: item.id,
         brand_name: item.brand_name,
+        description: item.description || "",
         display_order: item.display_order,
         images: images.filter((img: any) => img.item_id === item.id),
       }));
@@ -91,6 +93,11 @@ const BeforeAfterSection = () => {
                   <h3 className="font-display text-xl font-semibold text-primary">
                     {item.brand_name}
                   </h3>
+                  {item.description && (
+                    <p className="text-muted-foreground text-sm leading-relaxed max-w-2xl">
+                      {item.description}
+                    </p>
+                  )}
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {beforeImgs.length > 0 && (
