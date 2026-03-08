@@ -87,7 +87,9 @@ const AboutSection = () => {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-1">—</span>
-                    Trabajo con un <span className="text-primary font-medium">sistema propio</span> de <span className="text-primary font-medium">planificación</span> y <span className="text-primary font-medium">análisis de contenido</span>, que me permite <span className="text-primary font-medium">organizar publicaciones</span>, <span className="text-primary font-medium">medir rendimiento</span> y <span className="text-primary font-medium">optimizar</span> cada estrategia mes a mes.
+                    <span className="text-muted-foreground font-body leading-relaxed">
+                      Trabajo con un <span className="text-primary font-medium">sistema propio</span> de <span className="text-primary font-medium">planificación</span> y <span className="text-primary font-medium">análisis de contenido</span>, que me permite <span className="text-primary font-medium">organizar publicaciones</span>, <span className="text-primary font-medium">medir rendimiento</span> y <span className="text-primary font-medium">optimizar</span> cada estrategia mes a mes.
+                    </span>
                   </li>
                 </ul>
               </div>
