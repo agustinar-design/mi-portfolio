@@ -33,6 +33,7 @@ const plans = [
       "Ajuste estratégico quincenal",
       "Landing page personalizada alineada a la identidad de la marca, con presentación del negocio, servicios/productos, formulario de contacto, botón directo a WhatsApp y adaptada a celular",
     ],
+    audienceTitle: "Para negocios que buscan escalar y convertir:",
     audience: [
       { text: "Y quieren ir un paso más allá", highlight: false },
       { text: "Buscan posicionarse con mayor autoridad", highlight: false },
