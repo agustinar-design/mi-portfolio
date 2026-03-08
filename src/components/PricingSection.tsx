@@ -6,21 +6,21 @@ const plans = [
     name: "Plan Impulso Digital",
     subtitle: "Incluye:",
     items: [
-      "10 historias estratégicas",
-      "4 Reels",
-      "10 posteos (carrusel o imagen)",
-      "Calendario mensual organizado",
-      "Definición de objetivos del mes",
-      "Análisis básico de métricas",
-      "Ajustes según rendimiento",
-      "Reunión mensual (opcional) o PDF simple con resumen de métricas, lo que funcionó mejor, lo que ajustamos, propuesta para el mes siguiente",
+      { text: "10 historias estratégicas", highlights: [] },
+      { text: "4 Reels", highlights: [] },
+      { text: "10 posteos (carrusel o imagen)", highlights: [] },
+      { text: "Calendario mensual organizado", highlights: [] },
+      { text: "Definición de objetivos del mes", highlights: [] },
+      { text: "Análisis básico de métricas", highlights: [] },
+      { text: "Ajustes según rendimiento", highlights: [] },
+      { text: "Reunión mensual (opcional) o PDF simple con resumen de métricas, lo que funcionó mejor, lo que ajustamos, propuesta para el mes siguiente", highlights: [] },
     ],
     audienceTitle: "Ideal para marcas y emprendimientos que:",
     audience: [
-      { text: "Quieren ordenar su presencia digital", highlight: false },
-      { text: "Necesitan una identidad clara y profesional", highlight: false },
-      { text: "Buscan una estructura profesional accesible", highlight: true },
-      { text: "Quieren empezar a generar confianza y visibilidad real", highlight: true },
+      { text: "Quieren ordenar su presencia digital", highlights: [] },
+      { text: "Necesitan una identidad clara y profesional", highlights: [] },
+      { text: "Buscan una estructura profesional accesible", highlights: ["estructura profesional accesible"] },
+      { text: "Quieren empezar a generar confianza y visibilidad real", highlights: ["confianza", "visibilidad"] },
     ],
     icons: [Heart, ThumbsUp, MessageCircle],
   },
@@ -28,21 +28,57 @@ const plans = [
     name: "Plan Expansión Digital",
     subtitle: "Incluye todo lo anterior +:",
     items: [
-      "Análisis de la competencia",
-      "Optimización más profunda de las métricas",
-      "Ajuste estratégico quincenal",
-      "Landing page personalizada alineada a la identidad de la marca, con presentación del negocio, servicios/productos, formulario de contacto, botón directo a WhatsApp y adaptada a celular",
+      { text: "Análisis de la competencia", highlights: [] },
+      { text: "Optimización más profunda de las métricas", highlights: [] },
+      { text: "Ajuste estratégico quincenal", highlights: [] },
+      { text: "Landing page personalizada alineada a la identidad de la marca, con presentación del negocio, servicios/productos, formulario de contacto, botón directo a WhatsApp y adaptada a celular", highlights: ["Landing page"] },
     ],
     audienceTitle: "Para negocios que buscan escalar y convertir:",
     audience: [
-      { text: "Y quieren ir un paso más allá", highlight: false },
-      { text: "Buscan posicionarse con mayor autoridad", highlight: false },
-      { text: "Necesitan un ecosistema digital más completo", highlight: true },
-      { text: "Quieren convertir visitas en oportunidades reales", highlight: false },
+      { text: "Y quieren ir un paso más allá", highlights: [] },
+      { text: "Buscan posicionarse con mayor autoridad", highlights: [] },
+      { text: "Necesitan un ecosistema digital más completo", highlights: ["un ecosistema digital más completo"] },
+      { text: "Quieren convertir visitas en oportunidades reales", highlights: [] },
     ],
     icons: [TrendingUp, BarChart3, ArrowUpRight],
   },
 ];
+
+const HighlightedText = ({ text, highlights }: { text: string; highlights: string[] }) => {
+  if (highlights.length === 0) return <span className="text-foreground">{text}</span>;
+  
+  let result: React.ReactNode[] = [];
+  let remaining = text;
+  let key = 0;
+  
+  while (remaining.length > 0) {
+    let earliestIndex = remaining.length;
+    let earliestHighlight = "";
+    
+    for (const h of highlights) {
+      const idx = remaining.toLowerCase().indexOf(h.toLowerCase());
+      if (idx !== -1 && idx < earliestIndex) {
+        earliestIndex = idx;
+        earliestHighlight = h;
+      }
+    }
+    
+    if (earliestHighlight === "") {
+      result.push(<span key={key}>{remaining}</span>);
+      break;
+    }
+    
+    if (earliestIndex > 0) {
+      result.push(<span key={key}>{remaining.slice(0, earliestIndex)}</span>);
+      key++;
+    }
+    result.push(<span key={key} className="text-primary font-medium">{remaining.slice(earliestIndex, earliestIndex + earliestHighlight.length)}</span>);
+    key++;
+    remaining = remaining.slice(earliestIndex + earliestHighlight.length);
+  }
+  
+  return <span>{result}</span>;
+};
 
 const FloatingIcons = ({ icons, side }: { icons: React.ElementType[]; side: "left" | "right" }) => (
   <div className={`absolute ${side === "left" ? "-bottom-6 -right-6" : "-bottom-6 -right-6"} flex gap-2`}>
@@ -104,7 +140,7 @@ const PricingSection = () => {
                   {plan.items.map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-muted-foreground font-body text-sm leading-relaxed">
                       <span className="text-primary mt-0.5 shrink-0">•</span>
-                      {item}
+                      <HighlightedText text={item.text} highlights={item.highlights} />
                     </li>
                   ))}
                 </ul>
@@ -125,9 +161,7 @@ const PricingSection = () => {
                   {plan.audience.map((item, i) => (
                     <li key={i} className="flex items-start gap-3 font-body text-sm leading-relaxed">
                       <span className="text-primary mt-0.5 shrink-0">•</span>
-                      <span className={item.highlight ? "text-primary font-medium" : "text-foreground"}>
-                        {item.text}
-                      </span>
+                      <HighlightedText text={item.text} highlights={item.highlights} />
                     </li>
                   ))}
                 </ul>
@@ -136,15 +170,6 @@ const PricingSection = () => {
           ))}
         </div>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center text-muted-foreground font-body text-sm mt-12"
-        >
-          ¿Querés saber más? <a href="#contact" className="text-primary hover:underline">Hablemos</a> y armamos algo a tu medida.
-        </motion.p>
       </div>
     </section>
   );
