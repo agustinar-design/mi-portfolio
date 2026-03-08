@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { X, ZoomIn } from "lucide-react";
+import { X, ZoomIn, ChevronDown } from "lucide-react";
 
 interface BeforeAfterImage {
   id: string;
@@ -21,6 +21,16 @@ interface BeforeAfterItem {
 const BeforeAfterSection = () => {
   const [items, setItems] = useState<BeforeAfterItem[]>([]);
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+
+  const toggleExpanded = (id: string) => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -76,10 +86,11 @@ const BeforeAfterSection = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 gap-16">
+          <div className="grid grid-cols-1 gap-6">
             {items.map((item, i) => {
               const beforeImgs = item.images.filter((img) => img.image_type === "before");
               const afterImgs = item.images.filter((img) => img.image_type === "after");
+              const isExpanded = expandedIds.has(item.id);
 
               return (
                 <motion.div
@@ -88,72 +99,103 @@ const BeforeAfterSection = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="space-y-6"
+                  className="rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden"
                 >
-                  <h3 className="font-display text-xl font-semibold text-primary">
-                    {item.brand_name}
-                  </h3>
-                  {item.description && (
-                    <p className="text-muted-foreground text-sm leading-relaxed max-w-2xl">
-                      {item.description}
-                    </p>
-                  )}
+                  {/* Clickable header */}
+                  <button
+                    onClick={() => toggleExpanded(item.id)}
+                    className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left transition-colors duration-300 hover:bg-primary/5"
+                  >
+                    <div className="space-y-1">
+                      <h3 className="font-display text-lg font-semibold text-primary">
+                        {item.brand_name}
+                      </h3>
+                      {item.description && (
+                        <p className="text-muted-foreground text-sm leading-relaxed max-w-2xl">
+                          {item.description}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-xs font-display tracking-wider uppercase text-muted-foreground hidden sm:inline">
+                        {isExpanded ? "Ocultar" : "Ver resultados"}
+                      </span>
+                      <ChevronDown
+                        className={`w-5 h-5 text-primary transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`}
+                      />
+                    </div>
+                  </button>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {beforeImgs.length > 0 && (
-                      <div className="space-y-3">
-                        <span className="font-display text-xs tracking-[0.2em] uppercase text-muted-foreground">
-                          Antes
-                        </span>
-                        <div className={`grid gap-3 ${beforeImgs.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
-                          {beforeImgs.map((img) => (
-                            <div
-                              key={img.id}
-                              onClick={() => setLightboxUrl(img.image_url)}
-                              className="group relative overflow-hidden rounded-xl border border-border/50 bg-card cursor-pointer transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.15)]"
-                            >
-                              <img
-                                src={img.image_url}
-                                alt={`${item.brand_name} - Antes`}
-                                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                                loading="lazy"
-                              />
-                              <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-500 flex items-center justify-center">
-                                <ZoomIn className="w-6 h-6 text-primary-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" />
+                  {/* Collapsible content */}
+                  <AnimatePresence initial={false}>
+                    {isExpanded && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.35, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-6 pb-6 pt-2">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {beforeImgs.length > 0 && (
+                              <div className="space-y-3">
+                                <span className="font-display text-xs tracking-[0.2em] uppercase text-muted-foreground">
+                                  Antes
+                                </span>
+                                <div className={`grid gap-3 ${beforeImgs.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
+                                  {beforeImgs.map((img) => (
+                                    <div
+                                      key={img.id}
+                                      onClick={() => setLightboxUrl(img.image_url)}
+                                      className="group relative overflow-hidden rounded-xl border border-border/50 bg-card cursor-pointer transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.15)]"
+                                    >
+                                      <img
+                                        src={img.image_url}
+                                        alt={`${item.brand_name} - Antes`}
+                                        className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                                        loading="lazy"
+                                      />
+                                      <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-500 flex items-center justify-center">
+                                        <ZoomIn className="w-6 h-6 text-primary-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" />
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+                            )}
 
-                    {afterImgs.length > 0 && (
-                      <div className="space-y-3">
-                        <span className="font-display text-xs tracking-[0.2em] uppercase text-primary">
-                          Después
-                        </span>
-                        <div className={`grid gap-3 ${afterImgs.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
-                          {afterImgs.map((img) => (
-                            <div
-                              key={img.id}
-                              onClick={() => setLightboxUrl(img.image_url)}
-                              className="group relative overflow-hidden rounded-xl border border-primary/30 bg-card shadow-[0_0_20px_hsl(263_70%_58%_/_0.1)] cursor-pointer transition-all duration-500 hover:border-primary/50 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.25)]"
-                            >
-                              <img
-                                src={img.image_url}
-                                alt={`${item.brand_name} - Después`}
-                                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                                loading="lazy"
-                              />
-                              <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-500 flex items-center justify-center">
-                                <ZoomIn className="w-6 h-6 text-primary-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" />
+                            {afterImgs.length > 0 && (
+                              <div className="space-y-3">
+                                <span className="font-display text-xs tracking-[0.2em] uppercase text-primary">
+                                  Después
+                                </span>
+                                <div className={`grid gap-3 ${afterImgs.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
+                                  {afterImgs.map((img) => (
+                                    <div
+                                      key={img.id}
+                                      onClick={() => setLightboxUrl(img.image_url)}
+                                      className="group relative overflow-hidden rounded-xl border border-primary/30 bg-card shadow-[0_0_20px_hsl(263_70%_58%_/_0.1)] cursor-pointer transition-all duration-500 hover:border-primary/50 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.25)]"
+                                    >
+                                      <img
+                                        src={img.image_url}
+                                        alt={`${item.brand_name} - Después`}
+                                        className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                                        loading="lazy"
+                                      />
+                                      <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-500 flex items-center justify-center">
+                                        <ZoomIn className="w-6 h-6 text-primary-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" />
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            )}
+                          </div>
                         </div>
-                      </div>
+                      </motion.div>
                     )}
-                  </div>
+                  </AnimatePresence>
                 </motion.div>
               );
             })}
