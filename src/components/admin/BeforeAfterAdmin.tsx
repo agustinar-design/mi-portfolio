@@ -287,10 +287,7 @@ const BeforeAfterAdmin = ({ userId }: { userId: string }) => {
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
-                  {item.description && (
-                    <p className="text-xs text-muted-foreground italic">{item.description}</p>
-                  )}
-                  <EditableDescription itemId={item.id} currentDescription={item.description} onUpdate={fetchItems} />
+                  <InlineDescriptionEditor itemId={item.id} currentDescription={item.description} onUpdate={fetchItems} />
                 </div>
                 <div className="grid grid-cols-2 gap-4 px-4 pb-4">
                   {/* Before column */}
