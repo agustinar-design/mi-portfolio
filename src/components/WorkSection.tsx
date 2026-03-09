@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { staticPortfolioItems, categoryLabels, type Category } from "@/data/staticPortfolioItems";
+import portfolioBg from "@/assets/portfolio-bg.jpg";
 
 const categories: { key: Category; label: string; subtitle: string }[] = [
   { key: "images", label: "Imágenes", subtitle: "contenido gráfico diseñado para comunicación comercial clara y directa." },
