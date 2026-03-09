@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import heroBg from "@/assets/hero-bg.png";
+import portfolioBg from "@/assets/portfolio-bg.jpg";
 
 const phrases = ["Tu visión", "Tu marca", "Tu historia"];
 
