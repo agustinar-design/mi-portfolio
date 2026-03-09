@@ -37,9 +37,12 @@ const HeroSection = () => {
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
-        <img src={heroBg} alt="" className="w-full h-full object-cover opacity-40" />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
-        <div className="absolute inset-0 bg-grid opacity-20 text-primary" />
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${portfolioBg})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/80 to-background" />
+        <div className="absolute inset-0 bg-background/40" />
       </div>
 
       {/* Floating orbs */}
