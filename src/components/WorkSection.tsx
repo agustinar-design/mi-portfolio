@@ -121,13 +121,7 @@ const WorkSection = () => {
 
   return (
     <section id="work" className="py-32 px-6 md:px-12 relative overflow-hidden">
-      {/* Background Image with Dark Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${portfolioBg})` }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/85 to-background/95" />
-      <div className="absolute inset-0 bg-background/60" />
+      <div className="absolute inset-0 bg-background" />
       
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary/5 rounded-full blur-[120px]" />
       <div className="container relative">
