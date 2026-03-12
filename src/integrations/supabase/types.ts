@@ -136,6 +136,27 @@ export type Database = {
         }
         Relationships: []
       }
+      static_item_orders: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          item_key: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          item_key: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          item_key?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import { Trash2, Upload, LogOut, ArrowLeft, EyeOff, Eye } from "lucide-react";
+import { Trash2, Upload, LogOut, ArrowLeft, EyeOff, Eye, ArrowUp, ArrowDown } from "lucide-react";
 import { staticPortfolioItems, categoryLabels, type Category, type StaticPortfolioItem } from "@/data/staticPortfolioItems";
 import BeforeAfterAdmin from "@/components/admin/BeforeAfterAdmin";
 
@@ -19,6 +19,17 @@ interface PortfolioItem {
   created_at: string;
 }
 
+interface OrderedItem {
+  key: string;
+  title: string;
+  description: string;
+  image?: string;
+  video?: string;
+  type: "static" | "db";
+  dbId?: string;
+  isHidden?: boolean;
+}
+
 const Admin = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -28,6 +39,7 @@ const Admin = () => {
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
   const [hiddenKeys, setHiddenKeys] = useState<Set<string>>(new Set());
+  const [orderMap, setOrderMap] = useState<Record<string, number>>({});
   const fileRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
@@ -45,17 +57,21 @@ const Admin = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  useEffect(() => {
-    fetchItems();
-  }, [activeTab]);
-
-  useEffect(() => {
-    fetchHiddenKeys();
-  }, []);
+  useEffect(() => { fetchItems(); }, [activeTab]);
+  useEffect(() => { fetchHiddenKeys(); fetchOrders(); }, []);
 
   const fetchHiddenKeys = async () => {
     const { data } = await supabase.from("hidden_static_items").select("item_key");
     if (data) setHiddenKeys(new Set(data.map((d: any) => d.item_key)));
+  };
+
+  const fetchOrders = async () => {
+    const { data } = await supabase.from("static_item_orders").select("item_key, display_order");
+    if (data) {
+      const map: Record<string, number> = {};
+      data.forEach((d: any) => { map[d.item_key] = d.display_order; });
+      setOrderMap(map);
+    }
   };
 
   const fetchItems = async () => {
@@ -65,6 +81,66 @@ const Admin = () => {
       .eq("category", activeTab)
       .order("display_order", { ascending: true });
     setItems(data || []);
+  };
+
+  // Build ordered list for current category
+  const buildOrderedList = (): OrderedItem[] => {
+    const staticItems: OrderedItem[] = staticPortfolioItems[activeTab].map((item) => ({
+      key: item.key,
+      title: item.title,
+      description: item.description,
+      image: item.image,
+      video: item.video,
+      type: "static" as const,
+      isHidden: hiddenKeys.has(item.key),
+    }));
+
+    const dbOrderedItems: OrderedItem[] = items.map((item) => ({
+      key: `db-${item.id}`,
+      title: item.title,
+      description: item.description,
+      ...(item.file_type === "video" ? { video: item.file_url } : { image: item.file_url }),
+      type: "db" as const,
+      dbId: item.id,
+    }));
+
+    const all = [...staticItems, ...dbOrderedItems];
+    all.sort((a, b) => {
+      const oa = orderMap[a.key] ?? 9999;
+      const ob = orderMap[b.key] ?? 9999;
+      return oa - ob;
+    });
+    return all;
+  };
+
+  const orderedList = buildOrderedList();
+
+  const saveOrder = async (newList: OrderedItem[]) => {
+    const upserts = newList.map((item, i) => ({
+      item_key: item.key,
+      display_order: i,
+    }));
+
+    // Delete all existing orders and re-insert
+    await supabase.from("static_item_orders").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+    const { error } = await supabase.from("static_item_orders").insert(upserts);
+    
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      const map: Record<string, number> = {};
+      upserts.forEach((u) => { map[u.item_key] = u.display_order; });
+      setOrderMap(map);
+      toast({ title: "Orden guardado", description: "El nuevo orden se refleja en tu portfolio." });
+    }
+  };
+
+  const moveItem = (index: number, direction: -1 | 1) => {
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= orderedList.length) return;
+    const newList = [...orderedList];
+    [newList[index], newList[newIndex]] = [newList[newIndex], newList[index]];
+    saveOrder(newList);
   };
 
   const handleUpload = async () => {
@@ -123,9 +199,7 @@ const Admin = () => {
 
   const handleHideStatic = async (key: string) => {
     const { error } = await supabase.from("hidden_static_items").insert({ item_key: key });
-    if (error) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
-    } else {
+    if (!error) {
       setHiddenKeys((prev) => new Set([...prev, key]));
       toast({ title: "Oculto", description: "El contenido ya no se muestra en el portfolio." });
     }
@@ -133,14 +207,8 @@ const Admin = () => {
 
   const handleShowStatic = async (key: string) => {
     const { error } = await supabase.from("hidden_static_items").delete().eq("item_key", key);
-    if (error) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
-    } else {
-      setHiddenKeys((prev) => {
-        const next = new Set(prev);
-        next.delete(key);
-        return next;
-      });
+    if (!error) {
+      setHiddenKeys((prev) => { const n = new Set(prev); n.delete(key); return n; });
       toast({ title: "Visible", description: "El contenido se muestra nuevamente." });
     }
   };
@@ -151,8 +219,6 @@ const Admin = () => {
   };
 
   if (loading) return <div className="min-h-screen bg-background flex items-center justify-center text-foreground">Cargando...</div>;
-
-  const staticItems = staticPortfolioItems[activeTab];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -175,11 +241,7 @@ const Admin = () => {
             <button
               key={cat}
               onClick={() => setActiveTab(cat)}
-              className={`px-5 py-2 font-display text-sm rounded-md transition-all duration-300 ${
-                activeTab === cat
-                  ? "bg-primary text-primary-foreground glow-violet-sm"
-                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-              }`}
+              className={`px-5 py-2 font-display text-sm rounded-md transition-all duration-300 ${activeTab === cat ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-secondary/80"}`}
             >
               {categoryLabels[cat]}
             </button>
@@ -191,85 +253,76 @@ const Admin = () => {
           <h2 className="font-display text-lg font-semibold">Subir nuevo archivo</h2>
           <Input placeholder="Título" value={title} onChange={(e) => setTitle(e.target.value)} />
           <Input placeholder="Descripción (opcional)" value={description} onChange={(e) => setDescription(e.target.value)} />
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/*,video/*"
-            className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 cursor-pointer"
-          />
+          <input ref={fileRef} type="file" accept="image/*,video/*" className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 cursor-pointer" />
           <Button onClick={handleUpload} disabled={uploading}>
             <Upload className="w-4 h-4 mr-2" /> {uploading ? "Subiendo..." : "Subir"}
           </Button>
         </div>
 
-        {/* Before & After - prominent section */}
+        {/* Before & After */}
         <BeforeAfterAdmin userId={user.id} />
 
-        {/* Static items (initial content) */}
+        {/* Reorder section */}
         <div className="space-y-4">
           <h2 className="font-display text-lg font-semibold">
-            Contenido inicial – {categoryLabels[activeTab]} ({staticItems.length})
+            Ordenar galería – {categoryLabels[activeTab]}
           </h2>
-          <p className="text-muted-foreground text-xs">Podés ocultar o mostrar cada pieza. Los ocultos no aparecen en tu portfolio.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {staticItems.map((item) => {
-              const isHidden = hiddenKeys.has(item.key);
-              return (
-                <div key={item.key} className={`bg-card border rounded-xl overflow-hidden transition-all duration-300 ${isHidden ? "border-destructive/30 opacity-50" : "border-border/50"}`}>
-                  <div className="aspect-square bg-black/30 flex items-center justify-center p-2">
-                    {item.video ? (
-                      <video src={item.video} controls className="max-w-full max-h-full object-contain rounded-lg" preload="metadata" />
-                    ) : (
-                      <img src={item.image} alt={item.title} className="max-w-full max-h-full object-contain rounded-lg" loading="lazy" />
-                    )}
-                  </div>
-                  <div className="p-4 flex items-start justify-between gap-2">
-                    <div className="min-w-0">
-                      <p className="font-display text-sm font-semibold truncate">{item.title}</p>
-                      {item.description && <p className="text-muted-foreground text-xs truncate">{item.description}</p>}
-                    </div>
+          <p className="text-muted-foreground text-xs">Usá las flechas para reordenar. El orden se guarda automáticamente. Los ocultos no aparecen en tu portfolio público.</p>
+          
+          <div className="space-y-2">
+            {orderedList.map((item, i) => (
+              <div
+                key={item.key}
+                className={`flex items-center gap-3 p-3 rounded-xl border transition-all duration-200 ${item.isHidden ? "border-destructive/30 opacity-50 bg-card/50" : "border-border/50 bg-card"}`}
+              >
+                {/* Thumbnail */}
+                <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-black/30">
+                  {item.video ? (
+                    <video src={item.video} className="w-full h-full object-cover" preload="metadata" muted />
+                  ) : (
+                    <img src={item.image} alt="" className="w-full h-full object-cover" loading="lazy" />
+                  )}
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <p className="font-display text-sm font-semibold truncate">{item.title}</p>
+                  <p className="text-muted-foreground text-xs truncate">{item.description}</p>
+                  {item.isHidden && <span className="text-destructive text-[10px] font-display uppercase tracking-wider">Oculto</span>}
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-1 shrink-0">
+                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => moveItem(i, -1)} disabled={i === 0} title="Subir">
+                    <ArrowUp className="w-4 h-4" />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => moveItem(i, 1)} disabled={i === orderedList.length - 1} title="Bajar">
+                    <ArrowDown className="w-4 h-4" />
+                  </Button>
+
+                  {item.type === "static" && (
                     <Button
                       variant="ghost"
                       size="icon"
-                      className={`shrink-0 ${isHidden ? "text-primary hover:text-primary" : "text-destructive hover:text-destructive"}`}
-                      onClick={() => isHidden ? handleShowStatic(item.key) : handleHideStatic(item.key)}
-                      title={isHidden ? "Mostrar en portfolio" : "Ocultar del portfolio"}
+                      className={`h-8 w-8 ${item.isHidden ? "text-primary" : "text-destructive"}`}
+                      onClick={() => item.isHidden ? handleShowStatic(item.key) : handleHideStatic(item.key)}
+                      title={item.isHidden ? "Mostrar" : "Ocultar"}
                     >
-                      {isHidden ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                      {item.isHidden ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
                     </Button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* DB uploaded items */}
-        <div className="space-y-4">
-          <h2 className="font-display text-lg font-semibold">
-            Subidos por vos – {categoryLabels[activeTab]} ({items.length})
-          </h2>
-          {items.length === 0 && (
-            <p className="text-muted-foreground text-sm">No hay archivos subidos en esta categoría aún.</p>
-          )}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {items.map((item) => (
-              <div key={item.id} className="bg-card border border-border/50 rounded-xl overflow-hidden group">
-                <div className="aspect-square bg-black/30 flex items-center justify-center p-2">
-                  {item.file_type === "video" ? (
-                    <video src={item.file_url} controls className="max-w-full max-h-full object-contain rounded-lg" preload="metadata" />
-                  ) : (
-                    <img src={item.file_url} alt={item.title} className="max-w-full max-h-full object-contain rounded-lg" loading="lazy" />
                   )}
-                </div>
-                <div className="p-4 flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <p className="font-display text-sm font-semibold truncate">{item.title}</p>
-                    {item.description && <p className="text-muted-foreground text-xs truncate">{item.description}</p>}
-                  </div>
-                  <Button variant="ghost" size="icon" className="shrink-0 text-destructive hover:text-destructive" onClick={() => handleDelete(item)}>
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+
+                  {item.type === "db" && item.dbId && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-destructive"
+                      onClick={() => handleDelete(items.find((x) => x.id === item.dbId)!)}
+                      title="Eliminar"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  )}
                 </div>
               </div>
             ))}
