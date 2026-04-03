@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Instagram } from "lucide-react";
 
 const ContactSection = () => {
   return (
@@ -49,7 +50,8 @@ const ContactSection = () => {
               href="https://www.instagram.com/abcontenidodigital/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground text-sm hover:text-primary transition-colors duration-300 font-body">
+              className="text-muted-foreground text-sm hover:text-primary transition-colors duration-300 font-body flex items-center gap-2">
+              <Instagram className="h-4 w-4" />
               Instagram
             </a>
           </div>
