@@ -83,7 +83,7 @@ const HighlightedText = ({ text, highlights }: { text: string; highlights: strin
 };
 
 const FloatingIcons = ({ icons, side }: { icons: React.ElementType[]; side: "left" | "right" }) => (
-  <div className={`absolute ${side === "left" ? "-bottom-6 -right-6" : "-bottom-6 -right-6"} flex gap-2`}>
+  <div className={`absolute ${side === "left" ? "bottom-3 right-3" : "bottom-3 right-3"} flex gap-2`}>
     {icons.map((Icon, i) => (
       <motion.div
         key={i}
