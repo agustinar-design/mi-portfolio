@@ -46,11 +46,11 @@ const ContactSection = () => {
           </p>
           <div className="flex gap-8">
             <a
-              href="https://www.linkedin.com/in/agustina-bernal-331709377?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+              href="https://www.instagram.com/abcontenidodigital/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground text-sm hover:text-primary transition-colors duration-300 font-body">
-              LinkedIn
+              Instagram
             </a>
           </div>
         </div>

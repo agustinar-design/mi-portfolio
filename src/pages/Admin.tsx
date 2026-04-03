@@ -4,9 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import { Trash2, Upload, LogOut, ArrowLeft, EyeOff, Eye, ArrowUp, ArrowDown } from "lucide-react";
+import { Upload, LogOut, ArrowLeft } from "lucide-react";
 import { staticPortfolioItems, categoryLabels, type Category, type StaticPortfolioItem } from "@/data/staticPortfolioItems";
 import BeforeAfterAdmin from "@/components/admin/BeforeAfterAdmin";
+import SortablePortfolioList, { type SortablePortfolioItem } from "@/components/admin/SortablePortfolioList";
 
 interface PortfolioItem {
   id: string;
@@ -19,17 +20,6 @@ interface PortfolioItem {
   created_at: string;
 }
 
-interface OrderedItem {
-  key: string;
-  title: string;
-  description: string;
-  image?: string;
-  video?: string;
-  type: "static" | "db";
-  dbId?: string;
-  isHidden?: boolean;
-}
-
 const Admin = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -40,6 +30,7 @@ const Admin = () => {
   const [uploading, setUploading] = useState(false);
   const [hiddenKeys, setHiddenKeys] = useState<Set<string>>(new Set());
   const [orderMap, setOrderMap] = useState<Record<string, number>>({});
+  const [isSavingOrder, setIsSavingOrder] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
@@ -84,8 +75,8 @@ const Admin = () => {
   };
 
   // Build ordered list for current category
-  const buildOrderedList = (): OrderedItem[] => {
-    const staticItems: OrderedItem[] = staticPortfolioItems[activeTab].map((item) => ({
+  const buildOrderedList = (): SortablePortfolioItem[] => {
+    const staticItems: SortablePortfolioItem[] = staticPortfolioItems[activeTab].map((item) => ({
       key: item.key,
       title: item.title,
       description: item.description,
@@ -95,7 +86,7 @@ const Admin = () => {
       isHidden: hiddenKeys.has(item.key),
     }));
 
-    const dbOrderedItems: OrderedItem[] = items.map((item) => ({
+    const dbOrderedItems: SortablePortfolioItem[] = items.map((item) => ({
       key: `db-${item.id}`,
       title: item.title,
       description: item.description,
@@ -115,32 +106,28 @@ const Admin = () => {
 
   const orderedList = buildOrderedList();
 
-  const saveOrder = async (newList: OrderedItem[]) => {
+  const saveOrder = async (newList: SortablePortfolioItem[]) => {
+    const previousMap = orderMap;
     const upserts = newList.map((item, i) => ({
       item_key: item.key,
       display_order: i,
     }));
 
-    // Delete all existing orders and re-insert
-    await supabase.from("static_item_orders").delete().neq("id", "00000000-0000-0000-0000-000000000000");
-    const { error } = await supabase.from("static_item_orders").insert(upserts);
+    const nextMap = upserts.reduce<Record<string, number>>((acc, item) => {
+      acc[item.item_key] = item.display_order;
+      return acc;
+    }, {});
+
+    setOrderMap((prev) => ({ ...prev, ...nextMap }));
+    setIsSavingOrder(true);
+
+    const { error } = await supabase.from("static_item_orders").upsert(upserts, { onConflict: "item_key" });
     
     if (error) {
+      setOrderMap(previousMap);
       toast({ title: "Error", description: error.message, variant: "destructive" });
-    } else {
-      const map: Record<string, number> = {};
-      upserts.forEach((u) => { map[u.item_key] = u.display_order; });
-      setOrderMap(map);
-      toast({ title: "Orden guardado", description: "El nuevo orden se refleja en tu portfolio." });
     }
-  };
-
-  const moveItem = (index: number, direction: -1 | 1) => {
-    const newIndex = index + direction;
-    if (newIndex < 0 || newIndex >= orderedList.length) return;
-    const newList = [...orderedList];
-    [newList[index], newList[newIndex]] = [newList[newIndex], newList[index]];
-    saveOrder(newList);
+    setIsSavingOrder(false);
   };
 
   const handleUpload = async () => {
@@ -267,66 +254,19 @@ const Admin = () => {
           <h2 className="font-display text-lg font-semibold">
             Ordenar galería – {categoryLabels[activeTab]}
           </h2>
-          <p className="text-muted-foreground text-xs">Usá las flechas para reordenar. El orden se guarda automáticamente. Los ocultos no aparecen en tu portfolio público.</p>
-          
-          <div className="space-y-2">
-            {orderedList.map((item, i) => (
-              <div
-                key={item.key}
-                className={`flex items-center gap-3 p-3 rounded-xl border transition-all duration-200 ${item.isHidden ? "border-destructive/30 opacity-50 bg-card/50" : "border-border/50 bg-card"}`}
-              >
-                {/* Thumbnail */}
-                <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-black/30">
-                  {item.video ? (
-                    <video src={item.video} className="w-full h-full object-cover" preload="metadata" muted />
-                  ) : (
-                    <img src={item.image} alt="" className="w-full h-full object-cover" loading="lazy" />
-                  )}
-                </div>
+          <p className="text-muted-foreground text-xs">
+            Arrastrá desde el ícono de puntos para reordenar. {isSavingOrder ? "Guardando cambios..." : "El orden se guarda automáticamente y se mantiene en tu portfolio público."}
+          </p>
 
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <p className="font-display text-sm font-semibold truncate">{item.title}</p>
-                  <p className="text-muted-foreground text-xs truncate">{item.description}</p>
-                  {item.isHidden && <span className="text-destructive text-[10px] font-display uppercase tracking-wider">Oculto</span>}
-                </div>
-
-                {/* Actions */}
-                <div className="flex items-center gap-1 shrink-0">
-                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => moveItem(i, -1)} disabled={i === 0} title="Subir">
-                    <ArrowUp className="w-4 h-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => moveItem(i, 1)} disabled={i === orderedList.length - 1} title="Bajar">
-                    <ArrowDown className="w-4 h-4" />
-                  </Button>
-
-                  {item.type === "static" && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className={`h-8 w-8 ${item.isHidden ? "text-primary" : "text-destructive"}`}
-                      onClick={() => item.isHidden ? handleShowStatic(item.key) : handleHideStatic(item.key)}
-                      title={item.isHidden ? "Mostrar" : "Ocultar"}
-                    >
-                      {item.isHidden ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                    </Button>
-                  )}
-
-                  {item.type === "db" && item.dbId && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-destructive"
-                      onClick={() => handleDelete(items.find((x) => x.id === item.dbId)!)}
-                      title="Eliminar"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+          <SortablePortfolioList
+            items={orderedList}
+            onReorder={saveOrder}
+            onToggleStaticVisibility={(item) => item.isHidden ? handleShowStatic(item.key) : handleHideStatic(item.key)}
+            onDeleteDbItem={(dbId) => {
+              const item = items.find((entry) => entry.id === dbId);
+              if (item) void handleDelete(item);
+            }}
+          />
         </div>
       </div>
     </div>

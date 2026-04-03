@@ -4,6 +4,7 @@ import { Heart, ThumbsUp, MessageCircle, TrendingUp, BarChart3, ArrowUpRight } f
 const plans = [
   {
     name: "Plan Impulso Digital",
+    price: "$250.000",
     subtitle: "Incluye:",
     items: [
       { text: "10 historias estratégicas", highlights: [] },
@@ -26,6 +27,7 @@ const plans = [
   },
   {
     name: "Plan Expansión Digital",
+    price: "$300.000",
     subtitle: "Incluye todo lo anterior +:",
     items: [
       { text: "Análisis de la competencia", highlights: [] },
@@ -128,18 +130,28 @@ const PricingSection = () => {
             >
               {/* Plan card */}
               <motion.div
-                className="relative rounded-xl border border-border/50 bg-card/80 backdrop-blur-sm p-8 transition-all duration-500 group cursor-default"
-                whileHover={{
-                  borderColor: "hsl(263 70% 58% / 0.5)",
-                  boxShadow: "0 0 30px hsl(263 70% 58% / 0.15), 0 0 60px hsl(263 70% 58% / 0.05)",
-                }}
+                className="group relative cursor-default overflow-hidden rounded-[1.75rem] border border-border/50 bg-card/35 p-8 shadow-2xl backdrop-blur-2xl transition-all duration-500 hover:border-primary/30 hover:bg-card/50"
+                whileHover={{ y: -6 }}
               >
-                <h3 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-1">{plan.name}</h3>
-                <p className="text-primary font-display text-sm mb-6">{plan.subtitle}</p>
-                <ul className="space-y-3">
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/12 via-card/5 to-secondary/15" />
+                <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+
+                <div className="relative mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <h3 className="mb-1 font-display text-2xl font-bold text-foreground md:text-3xl">{plan.name}</h3>
+                    <p className="font-display text-sm text-primary">{plan.subtitle}</p>
+                  </div>
+
+                  <div className="w-fit rounded-full border border-primary/20 bg-primary/10 px-4 py-2 backdrop-blur-md">
+                    <p className="font-display text-[10px] uppercase tracking-[0.25em] text-primary/80">Inversión</p>
+                    <p className="font-display text-2xl font-bold text-foreground">{plan.price}</p>
+                  </div>
+                </div>
+
+                <ul className="relative space-y-3">
                   {plan.items.map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-muted-foreground font-body text-sm leading-relaxed">
-                      <span className="text-primary mt-0.5 shrink-0">•</span>
+                    <li key={i} className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground font-body">
+                      <span className="mt-0.5 shrink-0 text-primary">•</span>
                       <HighlightedText text={item.text} highlights={item.highlights} />
                     </li>
                   ))}
@@ -150,17 +162,20 @@ const PricingSection = () => {
 
               {/* Audience card */}
               <motion.div
-                className="rounded-xl border border-border/50 bg-card/60 backdrop-blur-sm p-6 transition-all duration-500"
-                whileHover={{
-                  borderColor: "hsl(263 70% 58% / 0.4)",
-                  boxShadow: "0 0 20px hsl(263 70% 58% / 0.1)",
-                }}
+                className="relative overflow-hidden rounded-[1.5rem] border border-border/50 bg-card/30 p-6 backdrop-blur-xl transition-all duration-500 hover:border-primary/25 hover:bg-card/45"
+                whileHover={{ y: -4 }}
               >
-                <p className="font-display text-sm font-semibold text-foreground mb-4">{plan.audienceTitle}</p>
-                <ul className="space-y-3">
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10" />
+                <div className="relative">
+                  <span className="mb-4 inline-flex rounded-full border border-primary/20 bg-primary/10 px-3 py-1 font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+                    {plan.audienceTitle}
+                  </span>
+                </div>
+
+                <ul className="relative space-y-3">
                   {plan.audience.map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 font-body text-sm leading-relaxed">
-                      <span className="text-primary mt-0.5 shrink-0">•</span>
+                    <li key={i} className="flex items-start gap-3 text-sm leading-relaxed font-body">
+                      <span className="mt-0.5 shrink-0 text-primary">•</span>
                       <HighlightedText text={item.text} highlights={item.highlights} />
                     </li>
                   ))}
