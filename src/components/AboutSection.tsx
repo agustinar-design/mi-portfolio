@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import fotoMia from "@/assets/foto-mia-3.jpeg.asset.json";
 
 const MiniChart = () => {
   const baseBars = [40, 65, 50, 80, 60, 90, 70, 55, 75, 85];
@@ -117,11 +118,27 @@ const AboutSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.15 }}
+            className="flex flex-col items-center justify-center"
           >
-            <div className="p-6 bg-card rounded-lg border border-border/50 text-center">
-              <p className="font-display text-4xl font-bold text-primary">∞</p>
-              <p className="text-muted-foreground text-sm mt-2">Ideas Creativas</p>
-            </div>
+            {/* Floating profile photo */}
+            <motion.div
+              className="relative w-48 h-48 md:w-56 md:h-56 mb-8"
+              animate={{ y: [0, -12, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
+              {/* Glow ring */}
+              <div className="absolute inset-0 rounded-full bg-primary/30 blur-xl" />
+              <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-primary/60 via-primary/20 to-transparent" />
+              
+              {/* Circle image */}
+              <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-primary/40 shadow-[0_0_30px_hsl(263_70%_58%_/_0.25)]">
+                <img
+                  src={fotoMia.url}
+                  alt="Agustina Bernal"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </motion.div>
 
             <MiniChart />
           </motion.div>
