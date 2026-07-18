@@ -94,7 +94,7 @@ const AboutSection = () => {
             <div className="space-y-8">
               <div>
                 <h3 className="font-display text-lg font-semibold text-foreground mb-3">
-                  <span className="text-primary">Qué hago</span> —
+                  <span className="text-primary">Qué hago</span>
                 </h3>
                 <p className="text-muted-foreground font-body leading-relaxed">
                   Diseño <span className="text-primary font-medium">piezas gráficas de alto impacto</span> (flyers, pósters, cartelería). Construyo la <span className="text-primary font-medium">identidad visual</span> y el <span className="text-primary font-medium">branding</span> para marcas y emprendimientos. Desarrollo assets visuales listos para aplicar en cualquier formato.
@@ -103,7 +103,7 @@ const AboutSection = () => {
 
               <div>
                 <h3 className="font-display text-lg font-semibold text-foreground mb-3">
-                  <span className="text-primary">Cómo trabajo</span> —
+                  <span className="text-primary">Cómo trabajo</span>
                 </h3>
                 <p className="text-muted-foreground font-body leading-relaxed">
                   Defino el <span className="text-primary font-medium">concepto visual</span> y la <span className="text-primary font-medium">paleta de colores</span> de la marca. Diseño las piezas gráficas con un enfoque <span className="text-primary font-medium">limpio, moderno y funcional</span>. Entrego materiales optimizados y listos para usar en redes, web o impresión. Trabajo con un <span className="text-primary font-medium">sistema ágil y ordenado</span>, asegurando que cada entrega mantenga una <span className="text-primary font-medium">coherencia estética impecable</span> de punta a punta.

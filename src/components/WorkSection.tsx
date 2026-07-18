@@ -105,26 +105,37 @@ const WorkSection = () => {
 
           {/* Compact thumbnail grid */}
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-            {previewItems.map((item, i) => (
-              <motion.div
-                key={item.orderKey}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: i * 0.05 }}
-                onClick={() => { setSelectedIndex(i); setGalleryOpen(true); }}
-                className="group relative aspect-square overflow-hidden rounded-xl border border-border/50 bg-card cursor-pointer transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_20px_hsl(263_70%_58%_/_0.15)]"
-              >
-                {item.video ? (
-                  <video src={item.video} className="w-full h-full object-cover" preload="metadata" muted />
-                ) : (
-                  <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
-                )}
-                <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-colors duration-300 flex items-center justify-center">
-                  <ZoomIn className="w-5 h-5 text-primary-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" />
-                </div>
-              </motion.div>
-            ))}
+            {previewItems.map((item, i) => {
+              const count = previewItems.length;
+              const mid = (count - 1) / 2;
+              const offset = i - mid;
+              const rotate = offset * 6;
+              const x = offset * 20;
+              return (
+                <motion.div
+                  key={item.orderKey}
+                  initial={{ opacity: 0, y: 80, x, rotate, scale: 0.7 }}
+                  whileInView={{ opacity: 1, y: 0, x: 0, rotate: 0, scale: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.7, delay: i * 0.09, ease: [0.22, 1, 0.36, 1] }}
+                  whileHover={{ y: -6, scale: 1.04, rotate: 0 }}
+                  onClick={() => { setSelectedIndex(i); setGalleryOpen(true); }}
+                  className="group relative aspect-square overflow-hidden rounded-xl border border-border/50 bg-card cursor-pointer transition-shadow duration-500 hover:border-primary hover:shadow-[0_0_35px_hsl(263_70%_58%_/_0.55)]"
+                >
+                  {item.video ? (
+                    <video src={item.video} className="w-full h-full object-cover" preload="metadata" muted />
+                  ) : (
+                    <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                  )}
+                  {/* Violet glow overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-primary/0 via-primary/0 to-primary/0 group-hover:from-primary/30 group-hover:via-primary/10 group-hover:to-transparent transition-all duration-500" />
+                  <div className="absolute inset-0 ring-0 group-hover:ring-2 ring-primary/60 rounded-xl transition-all duration-500" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <ZoomIn className="w-5 h-5 text-primary-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-[0_0_8px_hsl(263_70%_58%)]" />
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
 
           {/* "Ver galería completa" button */}
