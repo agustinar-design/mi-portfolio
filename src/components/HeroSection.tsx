@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import portfolioBg from "@/assets/portfolio-bg.jpg";
 
 const phrases = ["Tu visión", "Tu marca", "Tu historia"];
 
@@ -36,16 +35,9 @@ const HeroSection = () => {
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 z-0">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${portfolioBg})` }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/80 to-background" />
-        <div className="absolute inset-0 bg-background/40" />
-      </div>
+      <div className="absolute inset-0 z-0 bg-background" />
 
-      {/* Floating orbs */}
+      {/* Floating orbs -->
       <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-primary/10 rounded-full blur-[100px] animate-float" />
       <div className="absolute bottom-1/3 left-1/5 w-48 h-48 bg-accent/10 rounded-full blur-[80px] animate-float" style={{ animationDelay: "2s" }} />
 
