@@ -50,13 +50,18 @@ const HeroSection = () => {
       <div className="absolute bottom-1/3 left-1/5 w-48 h-48 bg-accent/10 rounded-full blur-[80px] animate-float" style={{ animationDelay: "2s" }} />
 
       <div className="container relative z-10 px-6 md:px-12">
-        <motion.p
-          className="text-primary font-display text-sm md:text-base tracking-[0.3em] uppercase mb-6"
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}>
-          SOCIAL MEDIA CREATIVA
-        </motion.p>
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-6">
+          <p className="text-primary font-display text-sm md:text-base tracking-[0.3em] uppercase">
+            DISEÑADORA GRÁFICA
+          </p>
+          <p className="text-muted-foreground font-body text-xs md:text-sm tracking-wide lowercase mt-1">
+            utn ba 🎓
+          </p>
+        </motion.div>
 
         <motion.h1
           className="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-bold leading-[0.95] tracking-tight mb-8"
@@ -75,7 +80,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.25 }}>
-          Ideas, contenido y edición para marcas que quieren destacar en redes.
+          Potencio la identidad visual de tu marca.
         </motion.p>
 
         <motion.div

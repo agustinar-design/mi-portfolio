@@ -88,56 +88,27 @@ const AboutSection = () => {
           >
             <p className="text-primary font-display text-sm tracking-[0.3em] uppercase mb-4">Sobre Mí</p>
             <h2 className="font-display text-4xl md:text-5xl font-bold mb-8">
-              Lo que me<br /><span className="text-gradient">destaca</span>
+              Sobre <span className="text-gradient">Mí</span>
             </h2>
 
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div>
-                <h3 className="font-display text-lg font-semibold text-foreground mb-3">Qué hago</h3>
-                <ul className="space-y-2 text-muted-foreground font-body leading-relaxed">
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">—</span>
-                    Diseño contenido visual para redes sociales
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">—</span>
-                    Construyo identidad estética para marcas
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">—</span>
-                    Organizo perfiles para que comuniquen mejor
-                  </li>
-                </ul>
+                <h3 className="font-display text-lg font-semibold text-foreground mb-3">
+                  <span className="text-primary">Qué hago</span> —
+                </h3>
+                <p className="text-muted-foreground font-body leading-relaxed">
+                  Diseño <span className="text-primary font-medium">piezas gráficas de alto impacto</span> (flyers, pósters, cartelería). Construyo la <span className="text-primary font-medium">identidad visual</span> y el <span className="text-primary font-medium">branding</span> para marcas y emprendimientos. Desarrollo assets visuales listos para aplicar en cualquier formato.
+                </p>
               </div>
 
               <div>
-                <h3 className="font-display text-lg font-semibold text-foreground mb-3">Cómo trabajo</h3>
-                <ul className="space-y-2 text-muted-foreground font-body leading-relaxed">
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">—</span>
-                    Analizo el perfil actual
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">—</span>
-                    Defino objetivos de contenido
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">—</span>
-                    Diseño una estructura visual coherente
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">—</span>
-                    Ajusto según métricas
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-1">—</span>
-                    <span className="text-muted-foreground font-body leading-relaxed">
-                      Trabajo con un <span className="text-primary font-medium">sistema propio</span> de <span className="text-primary font-medium">planificación</span> y <span className="text-primary font-medium">análisis de contenido</span>, que me permite <span className="text-primary font-medium">organizar publicaciones</span>, <span className="text-primary font-medium">medir rendimiento</span> y <span className="text-primary font-medium">optimizar</span> cada estrategia mes a mes.
-                    </span>
-                  </li>
-                </ul>
+                <h3 className="font-display text-lg font-semibold text-foreground mb-3">
+                  <span className="text-primary">Cómo trabajo</span> —
+                </h3>
+                <p className="text-muted-foreground font-body leading-relaxed">
+                  Defino el <span className="text-primary font-medium">concepto visual</span> y la <span className="text-primary font-medium">paleta de colores</span> de la marca. Diseño las piezas gráficas con un enfoque <span className="text-primary font-medium">limpio, moderno y funcional</span>. Entrego materiales optimizados y listos para usar en redes, web o impresión. Trabajo con un <span className="text-primary font-medium">sistema ágil y ordenado</span>, asegurando que cada entrega mantenga una <span className="text-primary font-medium">coherencia estética impecable</span> de punta a punta.
+                </p>
               </div>
-
             </div>
           </motion.div>
 
@@ -147,34 +118,14 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.15 }}
           >
-            <div className="grid grid-cols-2 gap-6">
-              {[
-                { number: "5+", label: "Años de Experiencia" },
-                { number: "∞", label: "Ideas Creativas" },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center p-4 bg-card rounded-lg border border-border/50">
-                  <p className="font-display text-2xl font-bold text-primary">{stat.number}</p>
-                  <p className="text-muted-foreground text-xs mt-1">{stat.label}</p>
-                </div>
-              ))}
+            <div className="p-6 bg-card rounded-lg border border-border/50 text-center">
+              <p className="font-display text-4xl font-bold text-primary">∞</p>
+              <p className="text-muted-foreground text-sm mt-2">Ideas Creativas</p>
             </div>
 
             <MiniChart />
           </motion.div>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-16 text-center"
-        >
-          <blockquote className="font-display text-xl md:text-2xl text-muted-foreground italic leading-relaxed max-w-3xl mx-auto">
-            "Si todas las marcas comunican igual, ninguna destaca. Mi trabajo es construir una presencia visual que se vea{" "}
-            <span className="text-primary font-semibold not-italic">diferente</span>."
-          </blockquote>
-        </motion.div>
       </div>
     </section>
   );

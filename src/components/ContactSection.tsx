@@ -22,19 +22,22 @@ const ContactSection = () => {
           <p className="text-muted-foreground text-lg mb-4 font-body">
             ¿Qué visión tenés para tu empresa? Me encantaría acompañarte.
           </p>
-          <p className="text-muted-foreground text-sm mb-4 font-body">
-            Ideal para negocios que quieren mejorar sus publicaciones sin contratar una agencia.
-          </p>
           <p className="text-muted-foreground text-sm mb-12 font-body">
-            Contactame por WhatsApp.
+            <a
+              href="https://wa.link/dc1x5t"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-primary transition-colors">
+              Contactame por WhatsApp.
+            </a>
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="https://WA.link/m8tz7y"
+            <a href="https://wa.link/dc1x5t"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-primary text-primary-foreground px-10 py-4 font-display text-sm tracking-wide rounded-md transition-all duration-300 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.5)] animate-pulse-glow">
-              Evaluar tu perfil gratis
+              Cotizar
             </a>
           </div>
 
