@@ -6,7 +6,6 @@ import { staticPortfolioItems, categoryLabels, type Category } from "@/data/stat
 
 const categories: { key: Category; label: string; subtitle: string }[] = [
   { key: "images", label: "Imágenes", subtitle: "contenido gráfico diseñado para comunicación comercial clara y directa." },
-  { key: "video", label: "Videos", subtitle: "contenido audiovisual para historias y reels." },
 ];
 
 interface GalleryItem {
