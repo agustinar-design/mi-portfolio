@@ -50,7 +50,7 @@ const HeroSection = () => {
           <p className="text-primary font-display text-sm md:text-base tracking-[0.3em] uppercase">
             DISEÑADORA GRÁFICA
           </p>
-          <p className="text-muted-foreground font-body text-xs md:text-sm tracking-[0.2em] uppercase mt-1">
+          <p className="text-foreground font-body text-xs md:text-sm tracking-[0.2em] uppercase mt-1">
             UTN BA 🎓
           </p>
         </motion.div>

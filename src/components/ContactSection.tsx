@@ -1,10 +1,18 @@
 import { motion } from "framer-motion";
-import { Instagram } from "lucide-react";
+import { Instagram, Mail, MessageCircle } from "lucide-react";
+import logo from "@/assets/contenido-visual-logo.svg.asset.json";
 
 const ContactSection = () => {
   return (
     <section id="contact" className="py-32 px-6 md:px-12 border-t border-border/50 relative">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[150px]" />
+
+      {/* Brand logo corner */}
+      <img
+        src={logo.url}
+        alt="Contenido Visual"
+        className="hidden md:block absolute bottom-6 right-6 w-20 h-20 opacity-70 hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+      />
 
       <div className="container relative">
         <motion.div
@@ -15,29 +23,33 @@ const ContactSection = () => {
           className="text-center max-w-2xl mx-auto">
 
           <p className="text-primary font-display text-sm tracking-[0.3em] uppercase mb-4">CONTACTO</p>
-          <h2 className="font-display text-4xl md:text-6xl font-bold mb-6">Llevemos tu marca
-            <br />
-            <span className="text-primary/70">a las redes sociales.</span>
+          <h2 className="font-display text-4xl md:text-6xl font-bold mb-6">
+            HAGAMOS QUE TU MARCA{" "}
+            <span className="text-primary">DESTAQUE</span>
+            <span className="text-foreground">.</span>
           </h2>
-          <p className="text-muted-foreground text-lg mb-4 font-body">
+          <p className="text-muted-foreground text-lg mb-10 font-body">
             ¿Qué visión tenés para tu empresa? Me encantaría acompañarte.
           </p>
-          <p className="text-muted-foreground text-sm mb-12 font-body">
+
+          <p className="text-foreground text-sm mb-6 font-body">
+            Escribime por el canal que prefieras:
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
               href="https://wa.link/dc1x5t"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-primary transition-colors">
-              Contactame por WhatsApp.
+              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 font-display text-sm tracking-wide rounded-md transition-all duration-300 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.5)]">
+              <MessageCircle className="w-4 h-4" />
+              WhatsApp
             </a>
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="https://wa.link/dc1x5t"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-primary text-primary-foreground px-10 py-4 font-display text-sm tracking-wide rounded-md transition-all duration-300 hover:shadow-[0_0_30px_hsl(263_70%_58%_/_0.5)] animate-pulse-glow">
-              Cotizar
+            <a
+              href="mailto:ab.contactowork@gmail.com"
+              className="inline-flex items-center gap-2 border border-primary/40 text-foreground px-8 py-4 font-display text-sm tracking-wide rounded-md transition-all duration-300 hover:border-primary hover:text-primary hover:shadow-[0_0_20px_hsl(263_70%_58%_/_0.3)]">
+              <Mail className="w-4 h-4" />
+              Enviar Email
             </a>
           </div>
 
