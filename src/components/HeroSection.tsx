@@ -37,7 +37,7 @@ const HeroSection = () => {
       {/* Background */}
       <div className="absolute inset-0 z-0 bg-background" />
 
-      {/* Floating orbs -->
+      {/* Floating orbs */}
       <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-primary/10 rounded-full blur-[100px] animate-float" />
       <div className="absolute bottom-1/3 left-1/5 w-48 h-48 bg-accent/10 rounded-full blur-[80px] animate-float" style={{ animationDelay: "2s" }} />
 

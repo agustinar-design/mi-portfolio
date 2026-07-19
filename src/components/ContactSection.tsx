@@ -23,9 +23,9 @@ const ContactSection = () => {
           className="text-center max-w-2xl mx-auto">
 
           <p className="text-primary font-display text-sm tracking-[0.3em] uppercase mb-4">CONTACTO</p>
-          <h2 className="font-display text-4xl md:text-6xl font-bold mb-6">
-            HAGAMOS QUE TU MARCA{" "}
-            <span className="text-primary">DESTAQUE</span>
+          <h2 className="font-display text-4xl md:text-6xl font-bold mb-6 normal-case">
+            Hagamos que tu marca{" "}
+            <span className="text-primary">destaque</span>
             <span className="text-foreground">.</span>
           </h2>
           <p className="text-muted-foreground text-lg mb-10 font-body">
