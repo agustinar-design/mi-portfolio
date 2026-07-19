@@ -1,78 +1,5 @@
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
 import fotoMia from "@/assets/foto-mia-3.jpeg.asset.json";
-
-const MiniChart = () => {
-  const baseBars = [40, 65, 50, 80, 60, 90, 70, 55, 75, 85];
-  const [bars, setBars] = useState(baseBars);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setBars((prev) =>
-        prev.map((v, i) => {
-          const delta = (Math.random() - 0.4) * 25;
-          return Math.max(20, Math.min(100, baseBars[i] + delta));
-        })
-      );
-    }, 1800);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="relative mt-6 p-4 rounded-xl border border-border/50 bg-card/30 backdrop-blur-sm">
-      {/* Decorative line grid */}
-      <div className="absolute inset-4 flex flex-col justify-between pointer-events-none">
-        {[0, 1, 2, 3].map((i) => (
-          <div key={i} className="w-full h-px bg-border/20" />
-        ))}
-      </div>
-
-      {/* Bars */}
-      <div className="flex items-end gap-1 h-28 relative">
-        {bars.map((h, i) => (
-          <motion.div
-            key={i}
-            className="flex-1 rounded-t-sm relative overflow-hidden cursor-pointer"
-            initial={{ height: 0, opacity: 0 }}
-            whileInView={{ height: `${h}%`, opacity: 1 }}
-            animate={{ height: `${h}%` }}
-            whileHover={{ height: `${Math.min(h + 15, 100)}%`, filter: "brightness(1.3)" }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {/* Gradient bar */}
-            <div className="absolute inset-0 rounded-t-sm bg-gradient-to-t from-primary/90 via-primary/70 to-primary/40" />
-            {/* Glow pulse */}
-            <motion.div
-              className="absolute inset-0 rounded-t-sm bg-gradient-to-t from-primary to-transparent"
-              animate={{ opacity: [0.3, 0.7, 0.3] }}
-              transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.15, ease: "easeInOut" }}
-            />
-            {/* Top shine */}
-            <motion.div
-              className="absolute top-0 left-0 right-0 h-1 bg-primary-foreground/30 rounded-t-sm"
-              animate={{ opacity: [0.2, 0.6, 0.2] }}
-              transition={{ duration: 3, repeat: Infinity, delay: i * 0.2 }}
-            />
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Bottom label */}
-      <div className="flex items-center justify-between mt-3">
-        <span className="text-[10px] font-display tracking-wider uppercase text-muted-foreground/60">Rendimiento</span>
-        <motion.div
-          className="flex items-center gap-1.5"
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-          <span className="text-[10px] font-display text-muted-foreground/60">En vivo</span>
-        </motion.div>
-      </div>
-    </div>
-  );
-};
 
 const AboutSection = () => {
   return (
@@ -140,7 +67,6 @@ const AboutSection = () => {
               </div>
             </motion.div>
 
-            <MiniChart />
           </motion.div>
         </div>
       </div>
