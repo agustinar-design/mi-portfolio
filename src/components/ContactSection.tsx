@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Instagram, Mail, MessageCircle } from "lucide-react";
-import logo from "@/assets/contenido-visual-logo.png.asset.json";
+import logo from "@/assets/MiLogoPNG.png.asset.json";
 
 const ContactSection = () => {
   return (
@@ -11,7 +11,7 @@ const ContactSection = () => {
       <img
         src={logo.url}
         alt="Contenido Visual"
-        className="absolute bottom-6 right-6 w-24 h-24 md:w-32 md:h-32 opacity-90 drop-shadow-[0_0_20px_hsl(263_70%_58%_/_0.4)] hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10"
+        className="absolute bottom-4 right-4 md:bottom-6 md:right-6 h-12 md:h-16 w-auto max-w-[180px] md:max-w-[260px] opacity-90 drop-shadow-[0_0_20px_hsl(263_70%_58%_/_0.4)] hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10 object-contain"
       />
 
       <div className="container relative">
