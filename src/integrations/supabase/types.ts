@@ -100,6 +100,36 @@ export type Database = {
         }
         Relationships: []
       }
+      logos: {
+        Row: {
+          created_at: string
+          description: string
+          display_order: number
+          id: string
+          image_url: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          display_order?: number
+          id?: string
+          image_url: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          display_order?: number
+          id?: string
+          image_url?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       portfolio_items: {
         Row: {
           category: string
