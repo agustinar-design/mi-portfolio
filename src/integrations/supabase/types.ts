@@ -100,6 +100,38 @@ export type Database = {
         }
         Relationships: []
       }
+      logo_images: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          image_url: string
+          logo_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url: string
+          logo_id: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url?: string
+          logo_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "logo_images_logo_id_fkey"
+            columns: ["logo_id"]
+            isOneToOne: false
+            referencedRelation: "logos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       logos: {
         Row: {
           created_at: string
