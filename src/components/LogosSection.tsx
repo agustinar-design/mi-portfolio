@@ -15,6 +15,14 @@ interface LogoItem {
 const LogosSection = () => {
   const [items, setItems] = useState<LogoItem[]>([]);
   const [lightbox, setLightbox] = useState<{ images: string[]; index: number } | null>(null);
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const toggleExpanded = (id: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  const DESC_LIMIT = 120;
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -117,11 +125,28 @@ const LogosSection = () => {
                   <h3 className="font-display text-lg font-semibold text-primary">
                     {item.title}
                   </h3>
-                  {item.description && (
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      {item.description}
-                    </p>
-                  )}
+                  {item.description && (() => {
+                    const isLong = item.description.length > DESC_LIMIT;
+                    const isOpen = expanded.has(item.id);
+                    const shown = !isLong || isOpen
+                      ? item.description
+                      : item.description.slice(0, DESC_LIMIT).trimEnd() + "…";
+                    return (
+                      <div>
+                        <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap">
+                          {shown}
+                        </p>
+                        {isLong && (
+                          <button
+                            onClick={() => toggleExpanded(item.id)}
+                            className="mt-1 text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
+                          >
+                            {isOpen ? "Ver menos" : "Ver más"}
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
               </motion.div>
             ))}
