@@ -66,7 +66,9 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
+  const logoRef = useRef<HTMLInputElement>(null);
+  const mockupsRef = useRef<HTMLInputElement>(null);
+  const MAX_MOCKUPS = 5;
 
   useEffect(() => { fetchItems(); }, []);
 
@@ -81,22 +83,30 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
   };
 
   const handleUpload = async () => {
-    const files = fileRef.current?.files;
-    if (!files || files.length === 0 || !title.trim()) {
-      toast({ title: "Error", description: "Seleccioná al menos una imagen y escribí el nombre de la marca.", variant: "destructive" });
+    const logoFile = logoRef.current?.files?.[0];
+    const mockupFiles = Array.from(mockupsRef.current?.files || []);
+    if (!logoFile || !title.trim()) {
+      toast({ title: "Error", description: "Subí el logo principal y escribí el nombre de la marca.", variant: "destructive" });
+      return;
+    }
+    if (mockupFiles.length > MAX_MOCKUPS) {
+      toast({ title: "Máximo excedido", description: `Podés subir hasta ${MAX_MOCKUPS} mockups.`, variant: "destructive" });
       return;
     }
     setUploading(true);
     try {
-      const uploaded: string[] = [];
-      for (const file of Array.from(files)) {
+      const uploadOne = async (file: File) => {
         const ext = file.name.split(".").pop();
         const path = `logos/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
         const { error: upErr } = await supabase.storage.from("portfolio").upload(path, file);
         if (upErr) throw upErr;
         const { data: urlData } = supabase.storage.from("portfolio").getPublicUrl(path);
-        uploaded.push(urlData.publicUrl);
-      }
+        return urlData.publicUrl;
+      };
+      const logoUrl = await uploadOne(logoFile);
+      const mockupUrls: string[] = [];
+      for (const f of mockupFiles) mockupUrls.push(await uploadOne(f));
+      const uploaded = [logoUrl, ...mockupUrls];
       const { data: logoRow, error } = await supabase.from("logos").insert({
         user_id: userId,
         title: title.trim(),
@@ -113,7 +123,8 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
       toast({ title: "¡Subido!", description: "Logo agregado." });
       setTitle("");
       setDescription("");
-      if (fileRef.current) fileRef.current.value = "";
+      if (logoRef.current) logoRef.current.value = "";
+      if (mockupsRef.current) mockupsRef.current.value = "";
       fetchItems();
     } catch (err: any) {
       toast({ title: "Error", description: err.message, variant: "destructive" });
@@ -123,6 +134,12 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
 
   const addImagesTo = async (item: LogoItem, files: FileList) => {
     try {
+      const current = item.images?.length ?? 0;
+      const remaining = MAX_MOCKUPS + 1 - current; // +1 because logo counts as slot 0
+      if (files.length > remaining) {
+        toast({ title: "Máximo excedido", description: `Solo podés agregar ${Math.max(remaining, 0)} imagen(es) más (máx. ${MAX_MOCKUPS} mockups + logo).`, variant: "destructive" });
+        return;
+      }
       const uploaded: string[] = [];
       for (const file of Array.from(files)) {
         const ext = file.name.split(".").pop();
@@ -186,14 +203,27 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
           rows={3}
           className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*"
-          multiple
-          className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 cursor-pointer"
-        />
-        <p className="text-xs text-muted-foreground">Podés seleccionar varios mockups (logo suelto, tarjetas, cajas, etc.)</p>
+        <div className="space-y-2">
+          <label className="text-xs font-semibold text-foreground">Logo principal (obligatorio)</label>
+          <input
+            ref={logoRef}
+            type="file"
+            accept="image/*"
+            className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 cursor-pointer"
+          />
+          <p className="text-xs text-muted-foreground">El logo o isotipo suelto que se muestra primero.</p>
+        </div>
+        <div className="space-y-2">
+          <label className="text-xs font-semibold text-foreground">Mockups (opcional · hasta {MAX_MOCKUPS})</label>
+          <input
+            ref={mockupsRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 cursor-pointer"
+          />
+          <p className="text-xs text-muted-foreground">Tarjetas, packaging, etiquetas, cartas, etc. Tocá el botón y en el selector mantené presionado para elegir varias.</p>
+        </div>
         <Button onClick={handleUpload} disabled={uploading}>
           <Upload className="w-4 h-4 mr-2" /> {uploading ? "Subiendo..." : "Subir marca"}
         </Button>
