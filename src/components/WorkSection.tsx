@@ -115,7 +115,7 @@ const WorkSection = () => {
                 animate={{ y: [0, -8, 0] }}
                 style={{ animationDelay: `${i * 0.3}s` }}
                 onClick={() => { setSelectedIndex(i); setGalleryOpen(true); }}
-                className="group relative aspect-[9/16] overflow-hidden rounded-2xl border-2 border-transparent bg-card cursor-pointer transition-all duration-500 hover:border-primary hover:-translate-y-2"
+                className="group relative aspect-square overflow-hidden rounded-2xl border-2 border-transparent bg-card cursor-pointer transition-all duration-500 hover:border-primary hover:-translate-y-2"
               >
                 <motion.div
                   className="w-full h-full"
