@@ -66,6 +66,8 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [mockupFiles, setMockupFiles] = useState<File[]>([]);
   const logoRef = useRef<HTMLInputElement>(null);
   const mockupsRef = useRef<HTMLInputElement>(null);
   const MAX_MOCKUPS = 5;
@@ -83,8 +85,6 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
   };
 
   const handleUpload = async () => {
-    const logoFile = logoRef.current?.files?.[0];
-    const mockupFiles = Array.from(mockupsRef.current?.files || []);
     if (!logoFile || !title.trim()) {
       toast({ title: "Error", description: "Subí el logo principal y escribí el nombre de la marca.", variant: "destructive" });
       return;
@@ -123,6 +123,8 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
       toast({ title: "¡Subido!", description: "Logo agregado." });
       setTitle("");
       setDescription("");
+      setLogoFile(null);
+      setMockupFiles([]);
       if (logoRef.current) logoRef.current.value = "";
       if (mockupsRef.current) mockupsRef.current.value = "";
       fetchItems();
@@ -209,23 +211,59 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
             ref={logoRef}
             type="file"
             accept="image/*"
+            onChange={(e) => setLogoFile(e.target.files?.[0] ?? null)}
             className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 cursor-pointer"
           />
-          <p className="text-xs text-muted-foreground">El logo o isotipo suelto que se muestra primero.</p>
+          <p className="text-xs text-muted-foreground">
+            {logoFile ? `✓ Seleccionado: ${logoFile.name}` : "El logo o isotipo suelto que se muestra primero."}
+          </p>
         </div>
         <div className="space-y-2">
-          <label className="text-xs font-semibold text-foreground">Mockups (opcional · hasta {MAX_MOCKUPS})</label>
+          <label className="text-xs font-semibold text-foreground">
+            Mockups (opcional · {mockupFiles.length}/{MAX_MOCKUPS} seleccionados)
+          </label>
           <input
             ref={mockupsRef}
             type="file"
             accept="image/*"
             multiple
+            onChange={(e) => {
+              const picked = Array.from(e.target.files || []);
+              if (picked.length === 0) return;
+              setMockupFiles((prev) => {
+                const combined = [...prev, ...picked].slice(0, MAX_MOCKUPS);
+                if (prev.length + picked.length > MAX_MOCKUPS) {
+                  toast({ title: "Máximo alcanzado", description: `Se guardaron ${combined.length} de ${MAX_MOCKUPS} mockups.` });
+                }
+                return combined;
+              });
+              if (mockupsRef.current) mockupsRef.current.value = "";
+            }}
             className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 cursor-pointer"
           />
-          <p className="text-xs text-muted-foreground">Tarjetas, packaging, etiquetas, cartas, etc. Tocá el botón y en el selector mantené presionado para elegir varias.</p>
+          <p className="text-xs text-muted-foreground">
+            Tarjetas, packaging, etiquetas, cartas, etc. En el móvil el selector suele dejar una sola: repetí "Elegir archivo" y se van sumando (hasta {MAX_MOCKUPS}).
+          </p>
+          {mockupFiles.length > 0 && (
+            <ul className="mt-2 space-y-1">
+              {mockupFiles.map((f, i) => (
+                <li key={i} className="flex items-center justify-between gap-2 text-xs bg-background/50 border border-border/50 rounded px-2 py-1">
+                  <span className="truncate">{i + 1}. {f.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => setMockupFiles((prev) => prev.filter((_, idx) => idx !== i))}
+                    className="text-muted-foreground hover:text-destructive shrink-0"
+                    aria-label="Quitar"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <Button onClick={handleUpload} disabled={uploading}>
-          <Upload className="w-4 h-4 mr-2" /> {uploading ? "Subiendo..." : "Subir marca"}
+          <Upload className="w-4 h-4 mr-2" /> {uploading ? "Subiendo..." : `Subir marca${mockupFiles.length ? ` (1 logo + ${mockupFiles.length} mockups)` : ""}`}
         </Button>
       </div>
 
