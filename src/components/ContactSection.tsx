@@ -62,7 +62,7 @@ const ContactSection = () => {
           </p>
           <div className="flex items-center gap-8">
             <a
-              href="https://www.instagram.com/abcontenidodigital/"
+              href="https://www.instagram.com/impronta.ab?igsh=dGU2YW8yYzIzdW1q"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground text-sm hover:text-primary transition-colors duration-300 font-body flex items-center gap-2">
