@@ -4,8 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const links = [
 { label: "Inicio", href: "#home" },
 { label: "Mi Trabajo", href: "#work" },
-{ label: "Sobre Mí", href: "#about" },
-{ label: "Contacto", href: "#contact" }];
+{ label: "Sobre Mí", href: "#about" }];
 
 
 const Navbar = () => {
@@ -30,7 +29,7 @@ const Navbar = () => {
           <a
             href="#contact"
             className="bg-primary text-primary-foreground px-5 py-2 text-sm font-display rounded-md transition-all duration-300 hover:shadow-[0_0_20px_hsl(263_70%_58%_/_0.5)] hover:brightness-110">
-            Charlemos
+            Contacto
           </a>
         </div>
 
@@ -64,6 +63,12 @@ const Navbar = () => {
                   {link.label}
                 </a>
             )}
+            <a
+              href="#contact"
+              onClick={() => setOpen(false)}
+              className="bg-primary text-primary-foreground text-center px-5 py-2.5 text-base font-display rounded-md transition-all duration-300 hover:shadow-[0_0_20px_hsl(263_70%_58%_/_0.5)] hover:brightness-110">
+              Contacto
+            </a>
             </div>
           </motion.div>
         }
