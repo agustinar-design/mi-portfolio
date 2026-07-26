@@ -70,7 +70,7 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
   const [mockupFiles, setMockupFiles] = useState<File[]>([]);
   const logoRef = useRef<HTMLInputElement>(null);
   const mockupsRef = useRef<HTMLInputElement>(null);
-  const MAX_MOCKUPS = 5;
+  const MAX_MOCKUPS = 6;
 
   useEffect(() => { fetchItems(); }, []);
 
@@ -103,9 +103,10 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
         const { data: urlData } = supabase.storage.from("portfolio").getPublicUrl(path);
         return urlData.publicUrl;
       };
-      const logoUrl = await uploadOne(logoFile);
-      const mockupUrls: string[] = [];
-      for (const f of mockupFiles) mockupUrls.push(await uploadOne(f));
+      const [logoUrl, ...mockupUrls] = await Promise.all([
+        uploadOne(logoFile),
+        ...mockupFiles.map((f) => uploadOne(f)),
+      ]);
       const uploaded = [logoUrl, ...mockupUrls];
       const { data: logoRow, error } = await supabase.from("logos").insert({
         user_id: userId,
@@ -142,15 +143,16 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
         toast({ title: "Máximo excedido", description: `Solo podés agregar ${Math.max(remaining, 0)} imagen(es) más (máx. ${MAX_MOCKUPS} mockups + logo).`, variant: "destructive" });
         return;
       }
-      const uploaded: string[] = [];
-      for (const file of Array.from(files)) {
-        const ext = file.name.split(".").pop();
-        const path = `logos/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-        const { error: upErr } = await supabase.storage.from("portfolio").upload(path, file);
-        if (upErr) throw upErr;
-        const { data: urlData } = supabase.storage.from("portfolio").getPublicUrl(path);
-        uploaded.push(urlData.publicUrl);
-      }
+      const uploaded = await Promise.all(
+        Array.from(files).map(async (file) => {
+          const ext = file.name.split(".").pop();
+          const path = `logos/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+          const { error: upErr } = await supabase.storage.from("portfolio").upload(path, file);
+          if (upErr) throw upErr;
+          const { data: urlData } = supabase.storage.from("portfolio").getPublicUrl(path);
+          return urlData.publicUrl;
+        })
+      );
       const start = item.images?.length ?? 0;
       const rows = uploaded.map((url, idx) => ({ logo_id: item.id, image_url: url, display_order: start + idx }));
       const { error } = await supabase.from("logo_images").insert(rows);
@@ -276,7 +278,7 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
               <div className="grid grid-cols-3 gap-1 p-2 bg-background/50">
                 {(item.images && item.images.length > 0 ? item.images : [{ id: "cover", logo_id: item.id, image_url: item.image_url, display_order: 0 } as LogoImage]).map((img) => (
                   <div key={img.id} className="relative aspect-square bg-background rounded-md overflow-hidden group">
-                    <img src={img.image_url} alt={item.title} className="w-full h-full object-contain p-1" />
+                    <img src={img.image_url} alt={item.title} loading="lazy" decoding="async" className="w-full h-full object-contain p-1" />
                     {img.id !== "cover" && (
                       <button
                         onClick={() => deleteImage(img)}
