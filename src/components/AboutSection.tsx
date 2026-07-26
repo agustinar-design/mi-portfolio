@@ -14,7 +14,6 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-primary font-display text-sm tracking-[0.3em] uppercase mb-4">Sobre Mí</p>
             <h2 className="font-display text-4xl md:text-5xl font-bold mb-8">
               Sobre <span className="text-gradient">Mí</span>
             </h2>
