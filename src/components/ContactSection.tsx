@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Instagram, Mail, MessageCircle } from "lucide-react";
-import logo from "@/assets/MiLogoPNG.png.asset.json";
+import logo from "@/assets/LogoIMPRONTA_en_blanco.png.asset.json";
 
 const ContactSection = () => {
   return (
