@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { Upload, LogOut, ArrowLeft } from "lucide-react";
 import { staticPortfolioItems, categoryLabels, type Category, type StaticPortfolioItem } from "@/data/staticPortfolioItems";
-import BeforeAfterAdmin from "@/components/admin/BeforeAfterAdmin";
 import LogosAdmin from "@/components/admin/LogosAdmin";
 import SortablePortfolioList, { type SortablePortfolioItem } from "@/components/admin/SortablePortfolioList";
 
@@ -246,9 +245,6 @@ const Admin = () => {
             <Upload className="w-4 h-4 mr-2" /> {uploading ? "Subiendo..." : "Subir"}
           </Button>
         </div>
-
-        {/* Before & After */}
-        <BeforeAfterAdmin userId={user.id} />
 
         {/* Logos */}
         <LogosAdmin userId={user.id} />
