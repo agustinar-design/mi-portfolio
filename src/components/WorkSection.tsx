@@ -143,7 +143,7 @@ const WorkSection = () => {
                 className="inline-flex items-center gap-2 px-6 py-3 font-display text-sm rounded-lg bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 transition-all duration-300"
               >
                 <Eye className="w-4 h-4" />
-                Ver galería completa ({allItems.length} {active === "video" ? "videos" : "imágenes"})
+                Ver galería completa ({allItems.length} imágenes)
               </button>
             </motion.div>
           )}

@@ -3,7 +3,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import { Trash2, Upload, Pencil, Check, X, Plus } from "lucide-react";
+import { Trash2, Upload, Pencil, Check, X, Plus, GripVertical } from "lucide-react";
+import {
+  DndContext,
+  closestCenter,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  useSortable,
+  rectSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface LogoItem {
   id: string;
@@ -193,6 +209,33 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
     }
   };
 
+  const persistOrder = async (ordered: LogoItem[]) => {
+    setItems(ordered);
+    const updates = ordered.map((it, idx) =>
+      supabase.from("logos").update({ display_order: idx }).eq("id", it.id)
+    );
+    const results = await Promise.all(updates);
+    const failed = results.find((r) => r.error);
+    if (failed?.error) {
+      toast({ title: "Error guardando orden", description: failed.error.message, variant: "destructive" });
+      fetchItems();
+    }
+  };
+
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } }),
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = items.findIndex((i) => i.id === active.id);
+    const newIndex = items.findIndex((i) => i.id === over.id);
+    if (oldIndex === -1 || newIndex === -1) return;
+    persistOrder(arrayMove(items, oldIndex, newIndex));
+  };
+
   return (
     <div className="space-y-6">
       <h2 className="font-display text-lg font-semibold">Logos</h2>
@@ -272,47 +315,99 @@ const LogosAdmin = ({ userId }: { userId: string }) => {
       {items.length === 0 ? (
         <p className="text-muted-foreground text-sm">No hay logos subidos aún.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {items.map((item) => (
-            <div key={item.id} className="bg-card border border-border/50 rounded-xl overflow-hidden">
-              <div className="grid grid-cols-3 gap-1 p-2 bg-background/50">
-                {(item.images && item.images.length > 0 ? item.images : [{ id: "cover", logo_id: item.id, image_url: item.image_url, display_order: 0 } as LogoImage]).map((img) => (
-                  <div key={img.id} className="relative aspect-square bg-background rounded-md overflow-hidden group">
-                    <img src={img.image_url} alt={item.title} loading="lazy" decoding="async" className="w-full h-full object-contain p-1" />
-                    {img.id !== "cover" && (
-                      <button
-                        onClick={() => deleteImage(img)}
-                        className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity bg-destructive text-destructive-foreground rounded-full p-1"
-                        aria-label="Eliminar mockup"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    )}
-                  </div>
+        <>
+          <p className="text-muted-foreground text-xs">Arrastrá desde el ícono de puntos para reordenar las marcas. El orden se guarda automáticamente.</p>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={items.map((i) => i.id)} strategy={rectSortingStrategy}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {items.map((item) => (
+                  <SortableLogoCard
+                    key={item.id}
+                    item={item}
+                    onDelete={handleDelete}
+                    onDeleteImage={deleteImage}
+                    onAddImages={addImagesTo}
+                    onUpdate={fetchItems}
+                  />
                 ))}
               </div>
-              <div className="p-4 space-y-3">
-                <InlineEditor item={item} onUpdate={fetchItems} />
-                <label className="flex items-center gap-2 text-xs cursor-pointer text-primary hover:text-primary/80">
-                  <Plus className="w-3 h-3" /> Añadir mockups
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    className="hidden"
-                    onChange={(e) => e.target.files && addImagesTo(item, e.target.files)}
-                  />
-                </label>
-                <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive w-full" onClick={() => handleDelete(item)}>
-                  <Trash2 className="w-4 h-4 mr-2" /> Eliminar
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
+            </SortableContext>
+          </DndContext>
+        </>
       )}
     </div>
   );
 };
 
 export default LogosAdmin;
+
+const SortableLogoCard = ({
+  item,
+  onDelete,
+  onDeleteImage,
+  onAddImages,
+  onUpdate,
+}: {
+  item: LogoItem;
+  onDelete: (item: LogoItem) => void;
+  onDeleteImage: (img: LogoImage) => void;
+  onAddImages: (item: LogoItem, files: FileList) => void;
+  onUpdate: () => void;
+}) => {
+  const { attributes, listeners, setActivatorNodeRef, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id: item.id });
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+      className={`bg-card border rounded-xl overflow-hidden transition-all ${isDragging ? "border-primary/50 shadow-2xl" : "border-border/50"}`}
+    >
+      <div className="flex items-center justify-between px-3 py-2 border-b border-border/50 bg-background/40">
+        <button
+          ref={setActivatorNodeRef}
+          type="button"
+          aria-label="Arrastrar para reordenar"
+          className="flex h-8 w-8 shrink-0 touch-none items-center justify-center rounded-lg border border-border/60 bg-secondary/40 text-muted-foreground hover:border-primary/30 hover:text-primary cursor-grab active:cursor-grabbing"
+          {...attributes}
+          {...listeners}
+        >
+          <GripVertical className="h-4 w-4" />
+        </button>
+        <span className="text-xs text-muted-foreground truncate ml-2">{item.title}</span>
+      </div>
+      <div className="grid grid-cols-3 gap-1 p-2 bg-background/50">
+        {(item.images && item.images.length > 0 ? item.images : [{ id: "cover", logo_id: item.id, image_url: item.image_url, display_order: 0 } as LogoImage]).map((img) => (
+          <div key={img.id} className="relative aspect-square bg-background rounded-md overflow-hidden group">
+            <img src={img.image_url} alt={item.title} loading="lazy" decoding="async" className="w-full h-full object-contain p-1" />
+            {img.id !== "cover" && (
+              <button
+                onClick={() => onDeleteImage(img)}
+                className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity bg-destructive text-destructive-foreground rounded-full p-1"
+                aria-label="Eliminar mockup"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="p-4 space-y-3">
+        <InlineEditor item={item} onUpdate={onUpdate} />
+        <label className="flex items-center gap-2 text-xs cursor-pointer text-primary hover:text-primary/80">
+          <Plus className="w-3 h-3" /> Añadir mockups
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={(e) => e.target.files && onAddImages(item, e.target.files)}
+          />
+        </label>
+        <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive w-full" onClick={() => onDelete(item)}>
+          <Trash2 className="w-4 h-4 mr-2" /> Eliminar
+        </Button>
+      </div>
+    </div>
+  );
+};
