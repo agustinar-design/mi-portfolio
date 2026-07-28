@@ -14,20 +14,8 @@ import visual5 from "@/assets/contenido_visual_5.png";
 import visual6 from "@/assets/contenido_visual_6.png";
 import visual7 from "@/assets/contenido_visual_7.png";
 import visual8 from "@/assets/contenido_visual_8.png";
-import video1 from "@/assets/video_1.mp4";
-import video2 from "@/assets/video_2.mp4";
-import video4 from "@/assets/video_4.mp4";
-import video6 from "@/assets/video_6.mp4";
-import video8 from "@/assets/video_8.mp4";
-import video9 from "@/assets/video_9.mp4";
-import video11 from "@/assets/video_11.mp4";
-import video13 from "@/assets/video_13.mp4";
-import video15 from "@/assets/video_15.mp4";
-import video16 from "@/assets/video_16.mp4";
-import video17 from "@/assets/video_17.mp4";
-import video20 from "@/assets/video_20.mp4";
 
-export type Category = "images" | "video";
+export type Category = "images";
 
 export interface StaticPortfolioItem {
   key: string;
@@ -39,7 +27,6 @@ export interface StaticPortfolioItem {
 
 export const categoryLabels: Record<Category, string> = {
   images: "Imágenes",
-  video: "Videos",
 };
 
 export const staticPortfolioItems: Record<Category, StaticPortfolioItem[]> = {
@@ -60,19 +47,5 @@ export const staticPortfolioItems: Record<Category, StaticPortfolioItem[]> = {
     { key: "elaborate-6", title: "Universal App – Gestión Multirubro", description: "Pieza con precios y demo del sistema de gestión.", image: visual6 },
     { key: "elaborate-7", title: "Universal App – Planes y Precios", description: "Contenido con opciones de planes mensual, anual y pago único.", image: visual7 },
     { key: "elaborate-8", title: "Universal App – Métricas Detalle", description: "Diseño mostrando métricas y funcionalidades del sistema.", image: visual8 },
-  ],
-  video: [
-    { key: "video-1", title: "Universal App – Reel Promocional", description: "Video corto promocional para redes sociales.", video: video1 },
-    { key: "video-2", title: "Universal App – Contenido Dinámico", description: "Video dinámico con animaciones y efectos visuales.", video: video2 },
-    { key: "video-4", title: "Universal App – Spot Comercial", description: "Video comercial con edición profesional.", video: video4 },
-    { key: "video-6", title: "Universal App – Campaña Digital", description: "Producción audiovisual para campaña en redes.", video: video6 },
-    { key: "video-8", title: "Universal App – Motion Graphics", description: "Video con motion graphics y branding.", video: video8 },
-    { key: "video-9", title: "Universal App – Historia Animada", description: "Video con animaciones para historias de redes.", video: video9 },
-    { key: "video-11", title: "Universal App – Promoción Express", description: "Contenido rápido y dinámico para redes sociales.", video: video11 },
-    { key: "video-13", title: "Universal App – Impacto Visual", description: "Video con efectos visuales de alto impacto.", video: video13 },
-    { key: "video-15", title: "Universal App – Branding Digital", description: "Video de branding con identidad visual.", video: video15 },
-    { key: "video-16", title: "Universal App – Reel Creativo", description: "Reel creativo con edición dinámica.", video: video16 },
-    { key: "video-17", title: "Universal App – Contenido Social", description: "Video optimizado para engagement en redes.", video: video17 },
-    { key: "video-20", title: "Universal App – Presentación Visual", description: "Video de presentación con efectos visuales.", video: video20 },
   ],
 };
