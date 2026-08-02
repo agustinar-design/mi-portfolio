@@ -6,7 +6,6 @@ const tools = [
   { name: "Adobe Photoshop", short: "Ps", color: "#31A8FF" },
   { name: "Adobe Illustrator", short: "Ai", color: "#FF9A00" },
   { name: "Adobe InDesign", short: "Id", color: "#FF3366" },
-  { name: "Canva", short: "Cv", color: "#00C4CC" },
 ];
 
 const HeroSection = () => {
