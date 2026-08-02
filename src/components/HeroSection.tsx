@@ -1,7 +1,13 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-
 const phrases = ["Tu visión", "Tu marca", "Tu historia"];
+
+const tools = [
+  { name: "Adobe Photoshop", short: "Ps", color: "#31A8FF" },
+  { name: "Adobe Illustrator", short: "Ai", color: "#FF9A00" },
+  { name: "Adobe InDesign", short: "Id", color: "#FF3366" },
+  { name: "Canva", short: "Cv", color: "#00C4CC" },
+];
 
 const HeroSection = () => {
   const [phraseIndex, setPhraseIndex] = useState(0);
@@ -53,6 +59,23 @@ const HeroSection = () => {
           <p className="text-foreground font-body text-xs md:text-sm tracking-[0.2em] uppercase mt-1">
             UTN BA 🎓
           </p>
+
+          <div className="mt-5 flex items-center gap-3">
+            {tools.map(({ name, short, color }, i) => (
+              <motion.span
+                key={name}
+                title={name}
+                aria-label={name}
+                className="flex h-11 w-11 items-center justify-center rounded-xl border bg-background/60 font-display text-sm font-bold backdrop-blur-sm transition-all duration-300 hover:scale-110"
+                style={{ borderColor: `${color}66`, color }}
+                animate={{ y: [0, -6, 0] }}
+                transition={{ repeat: Infinity, duration: 3 + i * 0.4, delay: i * 0.25, ease: "easeInOut" }}
+                whileHover={{ boxShadow: `0 0 20px ${color}80` }}
+              >
+                {short}
+              </motion.span>
+            ))}
+          </div>
         </motion.div>
 
         <motion.h1
