@@ -1,7 +1,15 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { SiAdobephotoshop, SiAdobeillustrator, SiAdobeindesign, SiCanva } from "react-icons/si";
 
 const phrases = ["Tu visión", "Tu marca", "Tu historia"];
+
+const tools = [
+  { name: "Photoshop", Icon: SiAdobephotoshop },
+  { name: "Illustrator", Icon: SiAdobeillustrator },
+  { name: "InDesign", Icon: SiAdobeindesign },
+  { name: "Canva", Icon: SiCanva },
+];
 
 const HeroSection = () => {
   const [phraseIndex, setPhraseIndex] = useState(0);
@@ -53,6 +61,21 @@ const HeroSection = () => {
           <p className="text-foreground font-body text-xs md:text-sm tracking-[0.2em] uppercase mt-1">
             UTN BA 🎓
           </p>
+
+          <div className="mt-4 flex items-center gap-3">
+            {tools.map(({ name, Icon }, i) => (
+              <motion.span
+                key={name}
+                title={name}
+                aria-label={name}
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/25 bg-primary/5 text-primary backdrop-blur-sm transition-all duration-300 hover:border-primary hover:shadow-[0_0_18px_hsl(263_70%_58%_/_0.45)]"
+                animate={{ y: [0, -6, 0] }}
+                transition={{ repeat: Infinity, duration: 3 + i * 0.4, delay: i * 0.25, ease: "easeInOut" }}
+              >
+                <Icon className="h-5 w-5" />
+              </motion.span>
+            ))}
+          </div>
         </motion.div>
 
         <motion.h1
