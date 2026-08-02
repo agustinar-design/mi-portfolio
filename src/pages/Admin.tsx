@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,8 @@ const Admin = () => {
   const [hiddenKeys, setHiddenKeys] = useState<Set<string>>(new Set());
   const [orderMap, setOrderMap] = useState<Record<string, number>>({});
   const [isSavingOrder, setIsSavingOrder] = useState(false);
+  const [localOrder, setLocalOrder] = useState<SortablePortfolioItem[] | null>(null);
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
@@ -75,7 +77,7 @@ const Admin = () => {
   };
 
   // Build ordered list for current category
-  const buildOrderedList = (): SortablePortfolioItem[] => {
+  const computedList = useMemo<SortablePortfolioItem[]>(() => {
     const staticItems: SortablePortfolioItem[] = staticPortfolioItems[activeTab].map((item) => ({
       key: item.key,
       title: item.title,
@@ -102,33 +104,37 @@ const Admin = () => {
       return oa - ob;
     });
     return all;
-  };
+  }, [activeTab, items, hiddenKeys, orderMap]);
 
-  const orderedList = buildOrderedList();
+  const orderedList = localOrder ?? computedList;
 
-  const saveOrder = async (newList: SortablePortfolioItem[]) => {
-    const previousMap = orderMap;
-    const upserts = newList.map((item, i) => ({
-      item_key: item.key,
-      display_order: i,
-    }));
+  useEffect(() => {
+    setLocalOrder(null);
+  }, [activeTab, items, hiddenKeys]);
 
-    const nextMap = upserts.reduce<Record<string, number>>((acc, item) => {
-      acc[item.item_key] = item.display_order;
-      return acc;
-    }, {});
+  useEffect(() => () => { if (saveTimer.current) clearTimeout(saveTimer.current); }, []);
 
-    setOrderMap((prev) => ({ ...prev, ...nextMap }));
+  const saveOrder = useCallback((newList: SortablePortfolioItem[]) => {
+    // Instant UI feedback, persistence debounced so rapid drags don't queue requests
+    setLocalOrder(newList);
     setIsSavingOrder(true);
 
-    const { error } = await supabase.from("static_item_orders").upsert(upserts, { onConflict: "item_key" });
-    
-    if (error) {
-      setOrderMap(previousMap);
-      toast({ title: "Error", description: error.message, variant: "destructive" });
-    }
-    setIsSavingOrder(false);
-  };
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(async () => {
+      const upserts = newList.map((item, i) => ({ item_key: item.key, display_order: i }));
+      const { error } = await supabase.from("static_item_orders").upsert(upserts, { onConflict: "item_key" });
+
+      if (error) {
+        toast({ title: "Error", description: error.message, variant: "destructive" });
+      } else {
+        setOrderMap(upserts.reduce<Record<string, number>>((acc, item) => {
+          acc[item.item_key] = item.display_order;
+          return acc;
+        }, {}));
+      }
+      setIsSavingOrder(false);
+    }, 500);
+  }, []);
 
   const handleUpload = async () => {
     const file = fileRef.current?.files?.[0];
