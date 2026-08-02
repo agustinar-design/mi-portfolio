@@ -2,12 +2,12 @@ import {
   DndContext,
   closestCenter,
   KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
+  PointerSensor,
   useSensor,
   useSensors,
   type DragEndEvent,
 } from "@dnd-kit/core";
+import { restrictToVerticalAxis, restrictToParentElement } from "@dnd-kit/modifiers";
 import {
   SortableContext,
   arrayMove,
@@ -17,6 +17,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Eye, EyeOff, GripVertical, Trash2 } from "lucide-react";
+import { memo, useCallback } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -44,7 +45,7 @@ interface SortableRowProps {
   onDeleteDbItem: (dbId: string) => void;
 }
 
-const SortableRow = ({ item, onToggleStaticVisibility, onDeleteDbItem }: SortableRowProps) => {
+const SortableRow = memo(({ item, onToggleStaticVisibility, onDeleteDbItem }: SortableRowProps) => {
   const {
     attributes,
     listeners,
@@ -59,12 +60,15 @@ const SortableRow = ({ item, onToggleStaticVisibility, onDeleteDbItem }: Sortabl
     <div
       ref={setNodeRef}
       style={{
-        transform: CSS.Transform.toString(transform),
+        transform: CSS.Translate.toString(transform),
         transition,
+        willChange: "transform",
+        position: "relative",
+        zIndex: isDragging ? 50 : undefined,
       }}
-      className={`flex items-center gap-3 rounded-2xl border p-3 transition-all duration-200 ${
+      className={`flex items-center gap-3 rounded-2xl border p-3 ${
         isDragging
-          ? "border-primary/40 bg-card/95 shadow-2xl backdrop-blur-xl"
+          ? "border-primary/40 bg-card shadow-2xl"
           : item.isHidden
             ? "border-destructive/30 bg-card/50 opacity-50"
             : "border-border/50 bg-card/80"
@@ -83,9 +87,9 @@ const SortableRow = ({ item, onToggleStaticVisibility, onDeleteDbItem }: Sortabl
 
       <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-background/40">
         {item.video ? (
-          <video src={item.video} className="h-full w-full object-cover" preload="metadata" muted />
+          <video src={item.video} className="h-full w-full object-cover" preload="none" muted />
         ) : (
-          <img src={item.image} alt={item.title} className="h-full w-full object-cover" loading="lazy" />
+          <img src={item.image} alt={item.title} className="h-full w-full object-cover" loading="lazy" decoding="async" />
         )}
       </div>
 
@@ -122,7 +126,8 @@ const SortableRow = ({ item, onToggleStaticVisibility, onDeleteDbItem }: Sortabl
       </div>
     </div>
   );
-};
+});
+SortableRow.displayName = "SortableRow";
 
 const SortablePortfolioList = ({
   items,
@@ -131,12 +136,11 @@ const SortablePortfolioList = ({
   onDeleteDbItem,
 }: SortablePortfolioListProps) => {
   const sensors = useSensors(
-    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } }),
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
 
     if (!over || active.id === over.id) return;
@@ -147,10 +151,15 @@ const SortablePortfolioList = ({
     if (oldIndex === -1 || newIndex === -1) return;
 
     onReorder(arrayMove(items, oldIndex, newIndex));
-  };
+  }, [items, onReorder]);
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+      modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+    >
       <SortableContext items={items.map((item) => item.key)} strategy={verticalListSortingStrategy}>
         <div className="space-y-2">
           {items.map((item) => (
