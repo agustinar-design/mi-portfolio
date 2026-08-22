@@ -257,6 +257,11 @@ const Admin = () => {
         {/* Logos */}
         <LogosAdmin userId={user.id} />
 
+        {/* Papelería */}
+        <PapeleriaAdmin userId={user.id} />
+
+
+
         {/* Reorder section */}
         <div className="space-y-4">
           <h2 className="font-display text-lg font-semibold">
