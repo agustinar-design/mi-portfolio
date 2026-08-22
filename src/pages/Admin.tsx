@@ -7,6 +7,8 @@ import { toast } from "@/hooks/use-toast";
 import { Upload, LogOut, ArrowLeft } from "lucide-react";
 import { staticPortfolioItems, categoryLabels, type Category, type StaticPortfolioItem } from "@/data/staticPortfolioItems";
 import LogosAdmin from "@/components/admin/LogosAdmin";
+import PapeleriaAdmin from "@/components/admin/PapeleriaAdmin";
+
 import SortablePortfolioList, { type SortablePortfolioItem } from "@/components/admin/SortablePortfolioList";
 
 interface PortfolioItem {
